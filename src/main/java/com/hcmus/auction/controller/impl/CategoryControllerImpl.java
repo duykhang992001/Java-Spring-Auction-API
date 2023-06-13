@@ -38,7 +38,7 @@ public class CategoryControllerImpl implements GenericController<OuterCategoryDT
     @ApiOperation(value = "Get category by id", response = OuterCategoryDTO.class)
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully") })
     public ResponseEntity<?> getById(
-            @ApiParam(value = "Category id needs to be fetched", required = true) @PathVariable(value = "categoryId") String categoryId) {
+            @ApiParam(value = "Outer category id needs to be fetched", required = true) @PathVariable(value = "categoryId") String categoryId) {
         OuterCategoryDTO outerCategoryDTO = categoryService.getById(categoryId);
         return outerCategoryDTO != null ?
                 ResponseEntity.ok(outerCategoryDTO) :
