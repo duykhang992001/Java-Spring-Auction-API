@@ -6,9 +6,13 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -25,4 +29,7 @@ public class InnerCategory {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "outer_category_id")
     private OuterCategory outerCategory;
+
+    @OneToMany(mappedBy = "category")
+    private List<Product> products = new ArrayList<>();
 }

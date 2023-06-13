@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class InnerCategoryMapper implements GenericMapper<InnerCategory, InnerCategoryDTO> {
     @Override
-    public InnerCategory toT(InnerCategoryDTO innerCategoryDTO) {
+    public InnerCategory toEntity(InnerCategoryDTO innerCategoryDTO) {
         return null;
     }
 
