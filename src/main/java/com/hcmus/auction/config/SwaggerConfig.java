@@ -10,9 +10,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-public class AppConfig {
+public class SwaggerConfig {
     @Bean
-    public Docket api() {
+    public Docket documentation() {
         final String BASE_PACKAGE = "com.hcmus.auction.controller";
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)

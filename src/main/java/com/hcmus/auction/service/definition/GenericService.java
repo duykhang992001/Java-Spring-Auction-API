@@ -1,8 +1,8 @@
 package com.hcmus.auction.service.definition;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface GenericService<T, ID> {
-    List<T> getAll();
+    Page<T> getAll(Integer page, Integer size);
     T getById(ID id);
 }

@@ -6,9 +6,11 @@ import com.hcmus.auction.model.mapper.ProductMapper;
 import com.hcmus.auction.repository.ProductRepository;
 import com.hcmus.auction.service.definition.GenericService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,11 +20,10 @@ public class ProductServiceImpl implements GenericService<ProductDTO, String> {
     private final ProductMapper productMapper;
 
     @Override
-    public List<ProductDTO> getAll() {
-        List<Product> products = productRepository.findAll();
-        return products.stream()
-                .map(productMapper::toDTO)
-                .toList();
+    public Page<ProductDTO> getAll(Integer page, Integer size) {
+        Pageable pageable = page != null && size != null ? PageRequest.of(page, size) : Pageable.unpaged();
+        Page<Product> productPage = productRepository.findAll(pageable);
+        return productPage.map(productMapper::toDTO);
     }
 
     @Override
