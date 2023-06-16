@@ -1,9 +1,12 @@
 package com.hcmus.auction.controller.impl;
 
+import com.hcmus.auction.common.util.PageUtil;
 import com.hcmus.auction.common.variable.EmptyResponse;
+import com.hcmus.auction.controller.definition.CategoryController;
 import com.hcmus.auction.controller.definition.GenericController;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.OuterCategoryDTO;
+import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.service.impl.CategoryServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/categories", produces = "application/json")
 @AllArgsConstructor
 @Api(tags = {"Category"}, description = "Operations about categories")
-public class CategoryControllerImpl implements GenericController<OuterCategoryDTO, String> {
+public class CategoryControllerImpl implements GenericController<OuterCategoryDTO, String>, CategoryController {
     private final CategoryServiceImpl categoryService;
 
     @GetMapping
@@ -33,7 +36,7 @@ public class CategoryControllerImpl implements GenericController<OuterCategoryDT
     public ResponseEntity<Page<OuterCategoryDTO>> getAll(
             @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
             @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) throws GenericException {
-        if ((page == null && size != null) || (page != null && size == null)) {
+        if (PageUtil.isValidPageParameters(page, size)) {
             throw new GenericException("Please provide enough page and size value");
         }
         return ResponseEntity.ok(categoryService.getAll(page, size));
@@ -41,7 +44,7 @@ public class CategoryControllerImpl implements GenericController<OuterCategoryDT
 
     @GetMapping(value = "/{categoryId}")
     @Override
-    @ApiOperation(value = "Get category by id", response = OuterCategoryDTO.class)
+    @ApiOperation(value = "Get category by outer category id", response = OuterCategoryDTO.class)
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully") })
     public ResponseEntity<?> getById(
             @ApiParam(value = "Outer category id needs to be fetched", required = true) @PathVariable(value = "categoryId") String categoryId) {
@@ -49,5 +52,19 @@ public class CategoryControllerImpl implements GenericController<OuterCategoryDT
         return outerCategoryDTO != null ?
                 ResponseEntity.ok(outerCategoryDTO) :
                 ResponseEntity.ok(new EmptyResponse());
+    }
+
+    @GetMapping(value = "/{categoryId}/products")
+    @Override
+    @ApiOperation(value = "Get products by inner category id with pagination")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
+    public ResponseEntity<Page<ProductDTO>> getProductsByCategoryId(
+            @ApiParam(value = "Inner category id needs to be fetched", required = true) @PathVariable(value = "categoryId") String categoryId,
+            @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
+            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) throws GenericException {
+        if (PageUtil.isValidPageParameters(page, size)) {
+            throw new GenericException("Please provide enough page and size value");
+        }
+        return ResponseEntity.ok(categoryService.getProductsByCategoryId(categoryId, page, size));
     }
 }

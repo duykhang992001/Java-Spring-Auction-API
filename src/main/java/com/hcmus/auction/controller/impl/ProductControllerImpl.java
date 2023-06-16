@@ -1,5 +1,6 @@
 package com.hcmus.auction.controller.impl;
 
+import com.hcmus.auction.common.util.PageUtil;
 import com.hcmus.auction.common.variable.EmptyResponse;
 import com.hcmus.auction.controller.definition.GenericController;
 import com.hcmus.auction.exception.GenericException;
@@ -33,7 +34,7 @@ public class ProductControllerImpl implements GenericController<ProductDTO, Stri
     public ResponseEntity<Page<ProductDTO>> getAll(
             @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
             @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) throws GenericException {
-        if ((page == null && size != null) || (page != null && size == null)) {
+        if (PageUtil.isValidPageParameters(page, size)) {
             throw new GenericException("Please provide enough page and size value");
         }
         return ResponseEntity.ok(productService.getAll(page, size));
