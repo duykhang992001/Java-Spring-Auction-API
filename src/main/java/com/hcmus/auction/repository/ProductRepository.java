@@ -6,7 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
-    Page<Product> findAllByCategoryId(String categoryId, Pageable pageable);
+    Page<Product> findAllByEndTimestampGreaterThanEqual(Integer endTimestamp, Pageable pageable);
+    Optional<Product> findByIdAndEndTimestampGreaterThanEqual(String id, Integer endTimestamp);
+    Page<Product> findAllByCategoryIdAndEndTimestampGreaterThanEqual(String categoryId, Integer endTimestamp, Pageable pageable);
 }

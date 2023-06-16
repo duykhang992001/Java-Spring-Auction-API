@@ -1,5 +1,6 @@
 package com.hcmus.auction.service.impl;
 
+import com.hcmus.auction.common.util.TimeUtil;
 import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.model.entity.Product;
 import com.hcmus.auction.model.mapper.ProductMapper;
@@ -22,21 +23,24 @@ public class ProductServiceImpl implements GenericService<ProductDTO, String>, P
 
     @Override
     public Page<ProductDTO> getAll(Integer page, Integer size) {
+        Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
         Pageable pageable = page != null && size != null ? PageRequest.of(page, size) : Pageable.unpaged();
-        Page<Product> productPage = productRepository.findAll(pageable);
+        Page<Product> productPage = productRepository.findAllByEndTimestampGreaterThanEqual(currentTimestamp, pageable);
         return productPage.map(productMapper::toDTO);
     }
 
     @Override
     public ProductDTO getById(String id) {
-        Optional<Product> productOptional = productRepository.findById(id);
+        Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
+        Optional<Product> productOptional = productRepository.findByIdAndEndTimestampGreaterThanEqual(id, currentTimestamp);
         return productOptional.map(productMapper::toDTO).orElse(null);
     }
 
     @Override
     public Page<ProductDTO> getProductsByCategoryId(String categoryId, Integer page, Integer size) {
+        Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
         Pageable pageable = page != null && size != null ? PageRequest.of(page, size) : Pageable.unpaged();
-        Page<Product> productPage = productRepository.findAllByCategoryId(categoryId, pageable);
+        Page<Product> productPage = productRepository.findAllByCategoryIdAndEndTimestampGreaterThanEqual(categoryId, currentTimestamp, pageable);
         return productPage.map(productMapper::toDTO);
     }
 }
