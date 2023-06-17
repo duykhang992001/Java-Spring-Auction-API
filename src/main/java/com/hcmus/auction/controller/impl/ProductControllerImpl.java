@@ -3,6 +3,7 @@ package com.hcmus.auction.controller.impl;
 import com.hcmus.auction.common.util.PageUtil;
 import com.hcmus.auction.common.variable.EmptyResponse;
 import com.hcmus.auction.controller.definition.GenericController;
+import com.hcmus.auction.controller.definition.PaginationController;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.service.impl.ProductServiceImpl;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/products", produces = "application/json")
 @AllArgsConstructor
 @Api(tags = {"Product"}, description = "Operations about products")
-public class ProductControllerImpl implements GenericController<ProductDTO, String> {
+public class ProductControllerImpl implements PaginationController<ProductDTO>, GenericController<ProductDTO, String> {
     private final ProductServiceImpl productService;
 
     @GetMapping

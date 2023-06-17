@@ -4,6 +4,7 @@ import com.hcmus.auction.common.util.PageUtil;
 import com.hcmus.auction.common.variable.EmptyResponse;
 import com.hcmus.auction.controller.definition.CategoryController;
 import com.hcmus.auction.controller.definition.GenericController;
+import com.hcmus.auction.controller.definition.UnPaginationController;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.OuterCategoryDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
@@ -22,24 +23,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/categories", produces = "application/json")
 @AllArgsConstructor
 @Api(tags = {"Category"}, description = "Operations about categories")
-public class CategoryControllerImpl implements GenericController<OuterCategoryDTO, String>, CategoryController {
+public class CategoryControllerImpl implements UnPaginationController<OuterCategoryDTO>,
+        GenericController<OuterCategoryDTO, String>,
+        CategoryController {
     private final CategoryServiceImpl categoryService;
 
     @GetMapping
     @Override
-    @ApiOperation(value = "Get categories with pagination")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
-    public ResponseEntity<Page<OuterCategoryDTO>> getAll(
-            @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
-            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) throws GenericException {
-        if (PageUtil.isValidPageParameters(page, size)) {
-            throw new GenericException("Please provide enough page and size value");
-        }
-        return ResponseEntity.ok(categoryService.getAll(page, size));
+    @ApiOperation(value = "Get categories")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully") })
+    public ResponseEntity<List<OuterCategoryDTO>> getAll() {
+        return ResponseEntity.ok(categoryService.getAll());
     }
 
     @GetMapping(value = "/{categoryId}")

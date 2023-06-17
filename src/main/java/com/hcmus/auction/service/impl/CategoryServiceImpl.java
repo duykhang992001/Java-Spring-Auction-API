@@ -7,26 +7,29 @@ import com.hcmus.auction.model.mapper.OuterCategoryMapper;
 import com.hcmus.auction.repository.OuterCategoryRepository;
 import com.hcmus.auction.service.definition.CategoryService;
 import com.hcmus.auction.service.definition.GenericService;
+import com.hcmus.auction.service.definition.UnPaginationService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class CategoryServiceImpl implements GenericService<OuterCategoryDTO, String>, CategoryService {
+public class CategoryServiceImpl implements UnPaginationService<OuterCategoryDTO>,
+        GenericService<OuterCategoryDTO, String>,
+        CategoryService {
     private final OuterCategoryRepository outerCategoryRepository;
     private final OuterCategoryMapper outerCategoryMapper;
     private final ProductServiceImpl productService;
 
     @Override
-    public Page<OuterCategoryDTO> getAll(Integer page, Integer size) {
-        Pageable pageable = page != null && size != null ? PageRequest.of(page, size) : Pageable.unpaged();
-        Page<OuterCategory> outerCategoryPage = outerCategoryRepository.findAll(pageable);
-        return outerCategoryPage.map(outerCategoryMapper::toDTO);
+    public List<OuterCategoryDTO> getAll() {
+        List<OuterCategory> outerCategories = outerCategoryRepository.findAll();
+        return outerCategories.stream()
+                .map(outerCategoryMapper::toDTO)
+                .toList();
     }
 
     @Override
