@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,9 +24,14 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>, Generi
     private final ProductMapper productMapper;
 
     @Override
-    public Page<ProductDTO> getAll(Integer page, Integer size) {
+    public Page<ProductDTO> getAll(Integer page, Integer size, String sortBy, String orderBy) {
         Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
-        Pageable pageable = page != null && size != null ? PageRequest.of(page, size) : Pageable.unpaged();
+        Sort sort = sortBy != null && orderBy != null ?
+                (orderBy.equals("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending()) :
+                Sort.unsorted();
+        Pageable pageable = page != null && size != null ?
+                PageRequest.of(page, size, sort) :
+                PageRequest.of(0, Integer.MAX_VALUE, sort);
         Page<Product> productPage = productRepository.findAllByEndTimestampGreaterThanEqual(currentTimestamp, pageable);
         return productPage.map(productMapper::toDTO);
     }

@@ -1,7 +1,8 @@
 package com.hcmus.auction.controller.impl;
 
-import com.hcmus.auction.common.util.PageUtil;
+import com.hcmus.auction.common.util.RequestParamUtil;
 import com.hcmus.auction.common.variable.EmptyResponse;
+import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.controller.definition.CategoryController;
 import com.hcmus.auction.controller.definition.GenericController;
 import com.hcmus.auction.controller.definition.UnPaginationController;
@@ -62,8 +63,8 @@ public class CategoryControllerImpl implements UnPaginationController<OuterCateg
             @ApiParam(value = "Inner category id needs to be fetched", required = true) @PathVariable(value = "categoryId") String categoryId,
             @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
             @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) throws GenericException {
-        if (PageUtil.isValidPageParameters(page, size)) {
-            throw new GenericException("Please provide enough page and size value");
+        if (!RequestParamUtil.isValidPageParameters(page, size)) {
+            throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
         }
         return ResponseEntity.ok(categoryService.getProductsByCategoryId(categoryId, page, size));
     }

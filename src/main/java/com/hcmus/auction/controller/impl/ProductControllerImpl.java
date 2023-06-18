@@ -1,7 +1,8 @@
 package com.hcmus.auction.controller.impl;
 
-import com.hcmus.auction.common.util.PageUtil;
+import com.hcmus.auction.common.util.RequestParamUtil;
 import com.hcmus.auction.common.variable.EmptyResponse;
+import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.controller.definition.GenericController;
 import com.hcmus.auction.controller.definition.PaginationController;
 import com.hcmus.auction.exception.GenericException;
@@ -30,15 +31,26 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>, 
 
     @GetMapping
     @Override
-    @ApiOperation(value = "Get products with pagination")
+    @ApiOperation(value = "Get products with pagination and sorting")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
     public ResponseEntity<Page<ProductDTO>> getAll(
             @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
-            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) throws GenericException {
-        if (PageUtil.isValidPageParameters(page, size)) {
-            throw new GenericException("Please provide enough page and size value");
+            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size,
+            @ApiParam(value = "Order by value: asc or desc") @RequestParam(value = "order_by", required = false) String orderBy,
+            @ApiParam(value = "Sort by value: numOfBid, currentPrice or endTimestamp") @RequestParam(value = "sort_by", required = false) String sortBy) throws GenericException {
+        if (!RequestParamUtil.isValidPageParameters(page, size)) {
+            throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
         }
-        return ResponseEntity.ok(productService.getAll(page, size));
+        if (!RequestParamUtil.isValidSortParameters(sortBy, orderBy)) {
+            throw new GenericException(ErrorMessage.MISSING_SORT_PARAMETERS.getMessage());
+        }
+        if (!RequestParamUtil.isValidProductSortByParameter(sortBy)) {
+            throw new GenericException(ErrorMessage.WRONG_PRODUCT_SORT_BY_PARAMETER.getMessage());
+        }
+        if (!RequestParamUtil.isValidOrderByParameter(orderBy)) {
+            throw new GenericException(ErrorMessage.WRONG_ORDER_BY_PARAMETER.getMessage());
+        }
+        return ResponseEntity.ok(productService.getAll(page, size, sortBy, orderBy));
     }
 
     @GetMapping(value = "/{productId}")
