@@ -44,10 +44,12 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>, Generi
     }
 
     @Override
-    public Page<ProductDTO> getProductsByCategoryId(String categoryId, Integer page, Integer size) {
+    public Page<ProductDTO> getProductsByCategoryId(String categoryId, String exclusiveProductId, Integer page, Integer size) {
         Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
         Pageable pageable = page != null && size != null ? PageRequest.of(page, size) : Pageable.unpaged();
-        Page<Product> productPage = productRepository.findAllByCategoryIdAndEndTimestampGreaterThanEqual(categoryId, currentTimestamp, pageable);
+        Page<Product> productPage = exclusiveProductId == null ?
+                productRepository.findAllByCategoryIdAndEndTimestampGreaterThanEqual(categoryId, currentTimestamp, pageable) :
+                productRepository.findAllByCategoryIdAndEndTimestampGreaterThanEqualAndIdNot(categoryId, currentTimestamp, exclusiveProductId, pageable);
         return productPage.map(productMapper::toDTO);
     }
 }

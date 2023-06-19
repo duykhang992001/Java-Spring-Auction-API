@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 public interface CategoryController {
-    ResponseEntity<Page<ProductDTO>> getProductsByCategoryId(String categoryId, Integer page, Integer size);
+    ResponseEntity<Page<ProductDTO>> getProductsByCategoryId(String categoryId, String exclusiveProductId, Integer page, Integer size);
 }
