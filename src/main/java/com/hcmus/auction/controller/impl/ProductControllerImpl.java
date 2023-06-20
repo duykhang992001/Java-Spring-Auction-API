@@ -31,13 +31,17 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>, 
 
     @GetMapping
     @Override
-    @ApiOperation(value = "Get products with pagination and sorting")
+    @ApiOperation(value = "Get products with pagination, sorting and searching")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
     public ResponseEntity<Page<ProductDTO>> getAll(
             @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
             @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size,
             @ApiParam(value = "Order by value: asc or desc") @RequestParam(value = "order_by", required = false) String orderBy,
-            @ApiParam(value = "Sort by value: numOfBid, currentPrice or endTimestamp") @RequestParam(value = "sort_by", required = false) String sortBy) throws GenericException {
+            @ApiParam(value = "Sort by value: numOfBid, currentPrice or endTimestamp") @RequestParam(value = "sort_by", required = false) String sortBy,
+            @ApiParam(value = "Search by name or category. If the string has white space, please replace it by %20") @RequestParam(value = "q", required = false) String q) throws GenericException {
+        final String WHITE_SPACE = " ";
+        final String WHITE_SPACE_IN_PARAM = "%20";
+
         if (!RequestParamUtil.isValidPageParameters(page, size)) {
             throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
         }
@@ -50,7 +54,8 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>, 
         if (!RequestParamUtil.isValidOrderByParameter(orderBy)) {
             throw new GenericException(ErrorMessage.WRONG_ORDER_BY_PARAMETER.getMessage());
         }
-        return ResponseEntity.ok(productService.getAll(page, size, sortBy, orderBy));
+        String keyword = q.replaceAll(WHITE_SPACE_IN_PARAM, WHITE_SPACE);
+        return ResponseEntity.ok(productService.getAll(page, size, sortBy, orderBy, keyword));
     }
 
     @GetMapping(value = "/{productId}")

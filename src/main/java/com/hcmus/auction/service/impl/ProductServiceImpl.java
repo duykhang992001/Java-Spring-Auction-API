@@ -1,5 +1,6 @@
 package com.hcmus.auction.service.impl;
 
+import com.hcmus.auction.common.util.RequestParamUtil;
 import com.hcmus.auction.common.util.TimeUtil;
 import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.model.entity.Product;
@@ -24,15 +25,18 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>, Generi
     private final ProductMapper productMapper;
 
     @Override
-    public Page<ProductDTO> getAll(Integer page, Integer size, String sortBy, String orderBy) {
+    public Page<ProductDTO> getAll(Integer page, Integer size, String sortBy, String orderBy, String keyword) {
         Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
+        String sortParam = keyword != null ? RequestParamUtil.formatProductSortByParameter(sortBy) : sortBy;
         Sort sort = sortBy != null && orderBy != null ?
-                (orderBy.equals("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending()) :
+                (orderBy.equals("asc") ? Sort.by(sortParam).ascending() : Sort.by(sortParam).descending()) :
                 Sort.unsorted();
         Pageable pageable = page != null && size != null ?
                 PageRequest.of(page, size, sort) :
                 PageRequest.of(0, Integer.MAX_VALUE, sort);
-        Page<Product> productPage = productRepository.findAllByEndTimestampGreaterThanEqual(currentTimestamp, pageable);
+        Page<Product> productPage = keyword != null ?
+                productRepository.search(keyword, currentTimestamp, pageable) :
+                productRepository.findAllByEndTimestampGreaterThanEqual(currentTimestamp, pageable);
         return productPage.map(productMapper::toDTO);
     }
 
