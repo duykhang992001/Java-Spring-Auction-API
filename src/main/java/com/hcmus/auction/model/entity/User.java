@@ -47,4 +47,7 @@ public class User {
 
     @OneToMany(mappedBy = "owner")
     private List<Product> ownProducts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<AuctionHistory> auctionHistories = new ArrayList<>();
 }

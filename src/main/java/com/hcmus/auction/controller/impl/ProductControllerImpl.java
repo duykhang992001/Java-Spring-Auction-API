@@ -5,7 +5,9 @@ import com.hcmus.auction.common.variable.EmptyResponse;
 import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.controller.definition.GenericController;
 import com.hcmus.auction.controller.definition.PaginationController;
+import com.hcmus.auction.controller.definition.ProductController;
 import com.hcmus.auction.exception.GenericException;
+import com.hcmus.auction.model.dto.AuctionHistoryDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.service.impl.ProductServiceImpl;
 import io.swagger.annotations.Api;
@@ -26,7 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/products", produces = "application/json")
 @AllArgsConstructor
 @Api(tags = {"Product"}, description = "Operations about products")
-public class ProductControllerImpl implements PaginationController<ProductDTO>, GenericController<ProductDTO, String> {
+public class ProductControllerImpl implements PaginationController<ProductDTO>,
+        GenericController<ProductDTO, String>,
+        ProductController {
     private final ProductServiceImpl productService;
 
     @GetMapping
@@ -56,6 +60,24 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>, 
         }
         String keyword = q.replaceAll(WHITE_SPACE_IN_PARAM, WHITE_SPACE);
         return ResponseEntity.ok(productService.getAll(page, size, sortBy, orderBy, keyword));
+    }
+
+    @GetMapping(value = "/{productId}/histories")
+    @Override
+    @ApiOperation(value = "Get auction histories by product id")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
+    public ResponseEntity<Page<AuctionHistoryDTO>> getAuctionHistoriesByProductId(
+            @ApiParam(value = "Product id needs to be fetched", required = true) @PathVariable(value = "productId") String productId,
+            @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
+            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size,
+            @ApiParam(value = "Order by value: asc or desc") @RequestParam(value = "order_by", required = false) String orderBy) throws GenericException {
+        if (!RequestParamUtil.isValidPageParameters(page, size)) {
+            throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
+        }
+        if (!RequestParamUtil.isValidOrderByParameter(orderBy)) {
+            throw new GenericException(ErrorMessage.WRONG_ORDER_BY_PARAMETER.getMessage());
+        }
+        return ResponseEntity.ok(productService.getAuctionHistoriesByProductId(productId, page, size, orderBy));
     }
 
     @GetMapping(value = "/{productId}")

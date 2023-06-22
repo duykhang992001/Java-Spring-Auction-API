@@ -64,4 +64,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<DescriptionHistory> descriptionHistories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<AuctionHistory> auctionHistories = new ArrayList<>();
 }

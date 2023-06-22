@@ -2,6 +2,7 @@ package com.hcmus.auction.service.impl;
 
 import com.hcmus.auction.common.util.RequestParamUtil;
 import com.hcmus.auction.common.util.TimeUtil;
+import com.hcmus.auction.model.dto.AuctionHistoryDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.model.entity.Product;
 import com.hcmus.auction.model.mapper.ProductMapper;
@@ -20,9 +21,12 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class ProductServiceImpl implements PaginationService<ProductDTO>, GenericService<ProductDTO, String>, ProductService {
+public class ProductServiceImpl implements PaginationService<ProductDTO>,
+        GenericService<ProductDTO, String>,
+        ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final AuctionHistoryServiceImpl auctionHistoryService;
 
     @Override
     public Page<ProductDTO> getAll(Integer page, Integer size, String sortBy, String orderBy, String keyword) {
@@ -55,5 +59,10 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>, Generi
                 productRepository.findAllByCategoryIdAndEndTimestampGreaterThanEqual(categoryId, currentTimestamp, pageable) :
                 productRepository.findAllByCategoryIdAndEndTimestampGreaterThanEqualAndIdNot(categoryId, currentTimestamp, exclusiveProductId, pageable);
         return productPage.map(productMapper::toDTO);
+    }
+
+    @Override
+    public Page<AuctionHistoryDTO> getAuctionHistoriesByProductId(String productId, Integer page, Integer size, String orderBy) {
+        return auctionHistoryService.getAuctionHistoriesByProductId(productId, page, size, orderBy);
     }
 }
