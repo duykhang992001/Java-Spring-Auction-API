@@ -50,4 +50,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<AuctionHistory> auctionHistories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<FavoriteProduct> favoriteProducts = new ArrayList<>();
 }
