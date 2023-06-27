@@ -53,4 +53,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<FavoriteProduct> favoriteProducts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<RoleHistory> roleHistories = new ArrayList<>();
 }

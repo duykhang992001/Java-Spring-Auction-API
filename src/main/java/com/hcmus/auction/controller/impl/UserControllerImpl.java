@@ -50,4 +50,15 @@ public class UserControllerImpl implements UserController {
         userService.deleteFavoriteProduct(userId, favoriteProductRequest.getProductId());
         return ResponseEntity.ok(new SuccessResponse(SuccessMessage.DELETE_FAVORITE_PRODUCT_SUCCESSFULLY.getMessage()));
     }
+
+    @PostMapping(value = "/{userId}/roles/histories")
+    @Override
+    @ApiOperation(value = "Send a upgraded role request")
+    @ApiResponses(value = { @ApiResponse(code = 201, message = "Send successfully"), @ApiResponse(code = 400, message = "Send failed") })
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public ResponseEntity<SuccessResponse> sendRequestToUpgradeRole(
+            @ApiParam(value = "User id needs to send request") @PathVariable(value = "userId") String userId) {
+        userService.addNewRoleHistory(userId);
+        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.ADD_NEW_ROLE_HISTORY_SUCCESSFULLY.getMessage()));
+    }
 }

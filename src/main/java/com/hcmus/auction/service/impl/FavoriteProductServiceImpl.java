@@ -8,33 +8,24 @@ import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.model.mapper.FavoriteProductMapper;
 import com.hcmus.auction.repository.FavoriteProductRepository;
 import com.hcmus.auction.service.definition.FavoriteProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 @Transactional
 public class FavoriteProductServiceImpl implements FavoriteProductService {
-    @Autowired
-    private FavoriteProductRepository favoriteProductRepository;
-
-    @Autowired
-    private FavoriteProductMapper favoriteProductMapper;
-
-    @Autowired
-    private UserServiceImpl userService;
-
-    @Autowired
-    private ProductServiceImpl productService;
+    private final FavoriteProductRepository favoriteProductRepository;
+    private final FavoriteProductMapper favoriteProductMapper;
+    private final ProductServiceImpl productService;
 
     @Override
     public void addNewFavoriteProduct(String userId, String productId) {
         if (productService.getById(productId) == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_PRODUCT.getMessage());
-        if (userService.getById(userId) == null)
-            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
         if (favoriteProductRepository.findByUserIdAndProductId(userId, productId).isPresent())
             throw new GenericException(ErrorMessage.EXITED_FAVORITE_PRODUCT.getMessage());
 
@@ -52,8 +43,6 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
     public void deleteFavoriteProduct(String userId, String productId) {
         if (productService.getById(productId) == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_PRODUCT.getMessage());
-        if (userService.getById(userId) == null)
-            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
         if (favoriteProductRepository.findByUserIdAndProductId(userId, productId).isEmpty())
             throw new GenericException(ErrorMessage.NOT_EXISTED_FAVORITE_PRODUCT.getMessage());
 

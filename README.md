@@ -8,3 +8,4 @@ Current progress:
 - 1.5: GET /api/v1/products/{productId} and GET /api/v1/categories/{categoryId}/products?page=0&size=5&exclusiveProductId={productId}
 - 2.1: POST /api/v1/users/{userId}/favorite and DELETE /api/v1/users/{userId}/favorite with request body { product_id: "" }
 - 2.3: GET /api/v1/products/{productId}/histories?page={page}&size={size}&order_by={asc,desc}
+- 2.5: POST /api/v1/users/{userId}/roles/histories
