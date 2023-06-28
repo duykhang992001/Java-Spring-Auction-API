@@ -7,4 +7,5 @@ import org.springframework.data.domain.Page;
 public interface ProductService {
     Page<ProductDTO> getProductsByCategoryId(String categoryId, String exclusiveProductId, Integer page, Integer size);
     Page<AuctionHistoryDTO> getAuctionHistoriesByProductId(String productId, Integer page, Integer size, String orderBy);
+    void addNewProductDescription(String productId, String content);
 }

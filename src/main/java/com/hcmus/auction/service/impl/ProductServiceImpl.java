@@ -2,6 +2,8 @@ package com.hcmus.auction.service.impl;
 
 import com.hcmus.auction.common.util.RequestParamUtil;
 import com.hcmus.auction.common.util.TimeUtil;
+import com.hcmus.auction.common.variable.ErrorMessage;
+import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.AuctionHistoryDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.model.entity.Product;
@@ -27,6 +29,7 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final AuctionHistoryServiceImpl auctionHistoryService;
+    private final DescriptionHistoryServiceImpl descriptionHistoryService;
 
     @Override
     public Page<ProductDTO> getAll(Integer page, Integer size, String sortBy, String orderBy, String keyword) {
@@ -64,5 +67,12 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
     @Override
     public Page<AuctionHistoryDTO> getAuctionHistoriesByProductId(String productId, Integer page, Integer size, String orderBy) {
         return auctionHistoryService.getAuctionHistoriesByProductId(productId, page, size, orderBy);
+    }
+
+    @Override
+    public void addNewProductDescription(String productId, String content) {
+        if (this.getById(productId) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_PRODUCT.getMessage());
+        descriptionHistoryService.addNewProductDescription(productId, content);
     }
 }

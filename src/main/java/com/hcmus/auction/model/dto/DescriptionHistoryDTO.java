@@ -13,6 +13,10 @@ public class DescriptionHistoryDTO {
     @ApiModelProperty(value = "Description id", example = "09319271-1752-46f6-887e-29714fb28c1a")
     private String id;
 
+    @JsonProperty(value = "product_id")
+    @ApiModelProperty(value = "Product id of description", example = "0a6eaf66-1339-4471-b1af-64ba9c628ff6")
+    private String productId;
+
     @JsonProperty(value = "created_at")
     @ApiModelProperty(value = "Description created timestamp", example = "1686546000")
     private Integer createdAt;

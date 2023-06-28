@@ -1,8 +1,11 @@
 package com.hcmus.auction.controller.impl;
 
 import com.hcmus.auction.common.util.RequestParamUtil;
+import com.hcmus.auction.common.variable.DescriptionHistoryRequest;
 import com.hcmus.auction.common.variable.EmptyResponse;
 import com.hcmus.auction.common.variable.ErrorMessage;
+import com.hcmus.auction.common.variable.SuccessMessage;
+import com.hcmus.auction.common.variable.SuccessResponse;
 import com.hcmus.auction.controller.definition.GenericController;
 import com.hcmus.auction.controller.definition.PaginationController;
 import com.hcmus.auction.controller.definition.ProductController;
@@ -17,11 +20,15 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -58,7 +65,7 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>,
         if (!RequestParamUtil.isValidOrderByParameter(orderBy)) {
             throw new GenericException(ErrorMessage.WRONG_ORDER_BY_PARAMETER.getMessage());
         }
-        String keyword = q.replaceAll(WHITE_SPACE_IN_PARAM, WHITE_SPACE);
+        String keyword = q == null ? null : q.replaceAll(WHITE_SPACE_IN_PARAM, WHITE_SPACE);
         return ResponseEntity.ok(productService.getAll(page, size, sortBy, orderBy, keyword));
     }
 
@@ -90,5 +97,17 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>,
         return productDTO != null ?
                 ResponseEntity.ok(productDTO) :
                 ResponseEntity.ok(new EmptyResponse());
+    }
+
+    @PostMapping(value = "/{productId}/descriptions")
+    @Override
+    @ApiOperation(value = "Add new product description")
+    @ApiResponses(value = { @ApiResponse(code = 201, message = "Add successfully"), @ApiResponse(code = 400, message = "Add failed") })
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public ResponseEntity<SuccessResponse> addNewProductDescription(
+            @ApiParam(value = "Product id needs to add description") @PathVariable(value = "productId") String productId,
+            @ApiParam(value = "Description needs to be added") @RequestBody DescriptionHistoryRequest descriptionHistoryRequest) {
+        productService.addNewProductDescription(productId, descriptionHistoryRequest.getContent());
+        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.ADD_NEW_PRODUCT_DESCRIPTION_SUCCESSFULLY.getMessage()));
     }
 }
