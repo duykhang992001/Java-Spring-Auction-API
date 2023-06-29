@@ -42,14 +42,16 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>,
 
     @GetMapping
     @Override
-    @ApiOperation(value = "Get products with pagination, sorting and searching")
+    @ApiOperation(value = "Get products with pagination, sorting, searching and end timestamp")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
     public ResponseEntity<Page<ProductDTO>> getAll(
             @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
             @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size,
             @ApiParam(value = "Order by value: asc or desc") @RequestParam(value = "order_by", required = false) String orderBy,
             @ApiParam(value = "Sort by value: numOfBid, currentPrice or endTimestamp") @RequestParam(value = "sort_by", required = false) String sortBy,
-            @ApiParam(value = "Search by name or category. If the string has white space, please replace it by %20") @RequestParam(value = "q", required = false) String q) throws GenericException {
+            @ApiParam(value = "Search by name or category. If the string has white space, please replace it by %20") @RequestParam(value = "q", required = false) String q,
+            @ApiParam(value = "End timestamp product must be greater than") @RequestParam(value = "gte", required = false) Integer gte,
+            @ApiParam(value = "End timestamp product must be less than") @RequestParam(value = "lte", required = false) Integer lte) throws GenericException {
         final String WHITE_SPACE = " ";
         final String WHITE_SPACE_IN_PARAM = "%20";
 
@@ -65,8 +67,11 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>,
         if (!RequestParamUtil.isValidOrderByParameter(orderBy)) {
             throw new GenericException(ErrorMessage.WRONG_ORDER_BY_PARAMETER.getMessage());
         }
+        if (!RequestParamUtil.isValidTimestampParameter(lte, gte)) {
+            throw new GenericException(ErrorMessage.EXCESS_TIMESTAMP_PARAMETERS.getMessage());
+        }
         String keyword = q == null ? null : q.replaceAll(WHITE_SPACE_IN_PARAM, WHITE_SPACE);
-        return ResponseEntity.ok(productService.getAll(page, size, sortBy, orderBy, keyword));
+        return ResponseEntity.ok(productService.getAll(page, size, sortBy, orderBy, keyword, lte, gte));
     }
 
     @GetMapping(value = "/{productId}/histories")

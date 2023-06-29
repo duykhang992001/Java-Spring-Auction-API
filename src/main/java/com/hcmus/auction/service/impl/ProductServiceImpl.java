@@ -32,8 +32,9 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
     private final DescriptionHistoryServiceImpl descriptionHistoryService;
 
     @Override
-    public Page<ProductDTO> getAll(Integer page, Integer size, String sortBy, String orderBy, String keyword) {
+    public Page<ProductDTO> getAll(Integer page, Integer size, String sortBy, String orderBy, String keyword, Integer lte, Integer gte) {
         Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
+        Integer finalGte = gte == null ? currentTimestamp : gte;
         String sortParam = keyword != null ? RequestParamUtil.formatProductSortByParameter(sortBy) : sortBy;
         Sort sort = sortBy != null && orderBy != null ?
                 (orderBy.equals("asc") ? Sort.by(sortParam).ascending() : Sort.by(sortParam).descending()) :
@@ -42,25 +43,31 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
                 PageRequest.of(page, size, sort) :
                 PageRequest.of(0, Integer.MAX_VALUE, sort);
         Page<Product> productPage = keyword != null ?
-                productRepository.search(keyword, currentTimestamp, pageable) :
-                productRepository.findAllByEndTimestampGreaterThanEqual(currentTimestamp, pageable);
+                (lte == null ? productRepository.searchWithGteEndTimestamp(keyword, finalGte, pageable) :
+                        productRepository.searchWithLteEndTimestamp(keyword, lte, pageable)) :
+                (lte == null ? productRepository.findAllByEndTimestampGreaterThanEqual(finalGte, pageable) :
+                        productRepository.findAllByEndTimestampLessThanEqual(lte, pageable));
         return productPage.map(productMapper::toDTO);
     }
 
     @Override
     public ProductDTO getById(String id) {
-        Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
-        Optional<Product> productOptional = productRepository.findByIdAndEndTimestampGreaterThanEqual(id, currentTimestamp);
+        Optional<Product> productOptional = productRepository.findById(id);
         return productOptional.map(productMapper::toDTO).orElse(null);
     }
 
     @Override
-    public Page<ProductDTO> getProductsByCategoryId(String categoryId, String exclusiveProductId, Integer page, Integer size) {
+    public Page<ProductDTO> getProductsByCategoryId(String categoryId, String exclusiveProductId, Integer page, Integer size, Integer lte, Integer gte) {
         Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
+        Integer finalGte = gte == null ? currentTimestamp : gte;
         Pageable pageable = page != null && size != null ? PageRequest.of(page, size) : Pageable.unpaged();
         Page<Product> productPage = exclusiveProductId == null ?
-                productRepository.findAllByCategoryIdAndEndTimestampGreaterThanEqual(categoryId, currentTimestamp, pageable) :
-                productRepository.findAllByCategoryIdAndEndTimestampGreaterThanEqualAndIdNot(categoryId, currentTimestamp, exclusiveProductId, pageable);
+                (lte == null ?
+                        productRepository.findAllByCategoryIdAndEndTimestampGreaterThanEqual(categoryId, finalGte, pageable) :
+                        productRepository.findAllByCategoryIdAndEndTimestampLessThanEqual(categoryId, lte, pageable)) :
+                (lte == null ?
+                        productRepository.findAllByCategoryIdAndEndTimestampGreaterThanEqualAndIdNot(categoryId, finalGte, exclusiveProductId, pageable) :
+                        productRepository.findAllByCategoryIdAndEndTimestampLessThanEqualAndIdNot(categoryId, lte, exclusiveProductId, pageable));
         return productPage.map(productMapper::toDTO);
     }
 

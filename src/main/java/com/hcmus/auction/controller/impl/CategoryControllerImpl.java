@@ -57,16 +57,21 @@ public class CategoryControllerImpl implements UnPaginationController<OuterCateg
 
     @GetMapping(value = "/{categoryId}/products")
     @Override
-    @ApiOperation(value = "Get products by inner category id with pagination and exclusive product id")
+    @ApiOperation(value = "Get products by inner category id with pagination, exclusive product id and end timestamp")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
     public ResponseEntity<Page<ProductDTO>> getProductsByCategoryId(
             @ApiParam(value = "Inner category id needs to be fetched", required = true) @PathVariable(value = "categoryId") String categoryId,
             @ApiParam(value = "Product id must not be included") @RequestParam(value = "exclusiveProductId", required = false) String exclusiveProductId,
             @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
-            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) throws GenericException {
+            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size,
+            @ApiParam(value = "End timestamp product must be less than") @RequestParam(value = "lte", required = false) Integer lte,
+            @ApiParam(value = "End timestamp product must be greater than") @RequestParam(value = "gte", required = false) Integer gte) throws GenericException {
         if (!RequestParamUtil.isValidPageParameters(page, size)) {
             throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
         }
-        return ResponseEntity.ok(categoryService.getProductsByCategoryId(categoryId, exclusiveProductId, page, size));
+        if (!RequestParamUtil.isValidTimestampParameter(lte, gte)) {
+            throw new GenericException(ErrorMessage.EXCESS_TIMESTAMP_PARAMETERS.getMessage());
+        }
+        return ResponseEntity.ok(categoryService.getProductsByCategoryId(categoryId, exclusiveProductId, page, size, lte, gte));
     }
 }

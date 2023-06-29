@@ -20,6 +20,10 @@ public class RequestParamUtil {
         return orderBy == null || orderBy.equals("asc") || orderBy.equals("desc");
     }
 
+    public static boolean isValidTimestampParameter(Integer lte, Integer gte) {
+        return lte == null || gte == null;
+    }
+
     public static boolean isValidProductSortByParameter(String sortBy) {
         return sortBy == null ||
                 sortBy.equals(SORT_BY_TIMESTAMP_WITHOUT_SEARCH) ||
@@ -28,11 +32,13 @@ public class RequestParamUtil {
     }
 
     public static String formatProductSortByParameter(String sortBy) {
+        if (sortBy == null)
+            return "";
         return switch (sortBy) {
             case SORT_BY_TIMESTAMP_WITHOUT_SEARCH -> SORT_BY_TIMESTAMP_WITH_SEARCH;
             case SORT_BY_BID_WITHOUT_SEARCH -> SORT_BY_BID_WITH_SEARCH;
             case SORT_BY_PRICE_WITHOUT_SEARCH -> SORT_BY_PRICE_WITH_SEARCH;
-            default -> null;
+            default -> "";
         };
     }
 }

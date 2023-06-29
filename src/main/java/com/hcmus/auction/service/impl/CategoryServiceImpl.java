@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements UnPaginationService<OuterCategoryDTO
     }
 
     @Override
-    public Page<ProductDTO> getProductsByCategoryId(String categoryId, String exclusiveProductId, Integer page, Integer size) {
-        return productService.getProductsByCategoryId(categoryId, exclusiveProductId, page, size);
+    public Page<ProductDTO> getProductsByCategoryId(String categoryId, String exclusiveProductId, Integer page, Integer size, Integer lte, Integer gte) {
+        return productService.getProductsByCategoryId(categoryId, exclusiveProductId, page, size, lte, gte);
     }
 }
