@@ -1,9 +1,13 @@
 package com.hcmus.auction.controller.impl;
 
+import com.hcmus.auction.common.util.RequestParamUtil;
+import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.common.variable.FavoriteProductRequest;
 import com.hcmus.auction.common.variable.SuccessMessage;
 import com.hcmus.auction.common.variable.SuccessResponse;
 import com.hcmus.auction.controller.definition.UserController;
+import com.hcmus.auction.exception.GenericException;
+import com.hcmus.auction.model.dto.FavoriteProductDTO;
 import com.hcmus.auction.service.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,13 +15,16 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +34,25 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"User"}, description = "Operations about users")
 public class UserControllerImpl implements UserController {
     private final UserServiceImpl userService;
+
+    @GetMapping(value = "/{userId}/favorite")
+    @Override
+    @ApiOperation(value = "Get favorite list with pagination and timestamp")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
+    public ResponseEntity<Page<FavoriteProductDTO>> getFavoriteProductsByUserId(
+            @ApiParam(value = "User id needs to get favorite list") @PathVariable(value = "userId") String userId,
+            @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
+            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size,
+            @ApiParam(value = "End timestamp product must be less than") @RequestParam(value = "lte", required = false) Integer lte,
+            @ApiParam(value = "End timestamp product must be greater than") @RequestParam(value = "gte", required = false) Integer gte) {
+        if (!RequestParamUtil.isValidPageParameters(page, size)) {
+            throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
+        }
+        if (!RequestParamUtil.isValidTimestampParameter(lte, gte)) {
+            throw new GenericException(ErrorMessage.EXCESS_TIMESTAMP_PARAMETERS.getMessage());
+        }
+        return ResponseEntity.ok(userService.getFavoriteProductsByUserId(userId, page, size, lte, gte));
+    }
 
     @PostMapping(value = "/{userId}/favorite")
     @Override

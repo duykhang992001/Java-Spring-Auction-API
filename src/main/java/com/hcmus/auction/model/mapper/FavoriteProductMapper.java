@@ -27,6 +27,14 @@ public class FavoriteProductMapper implements GenericMapper<FavoriteProduct, Fav
 
     @Override
     public FavoriteProductDTO toDTO(FavoriteProduct favoriteProduct) {
-        return null;
+        ProductMapper productMapper = new ProductMapper();
+        FavoriteProductDTO favoriteProductDTO = new FavoriteProductDTO();
+
+        favoriteProductDTO.setId(favoriteProduct.getId());
+        favoriteProductDTO.setUserId(favoriteProduct.getUser().getId());
+        favoriteProductDTO.setCreatedAt(favoriteProduct.getCreatedAt());
+        favoriteProductDTO.setProduct(productMapper.toDTO(favoriteProduct.getProduct()));
+
+        return favoriteProductDTO;
     }
 }
