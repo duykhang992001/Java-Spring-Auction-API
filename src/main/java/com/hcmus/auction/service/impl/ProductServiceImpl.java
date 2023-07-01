@@ -77,6 +77,12 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
     }
 
     @Override
+    public Page<ProductDTO> getAuctioningProductsByUserId(String userId, Integer page, Integer size) {
+        Page<String> productIdPage = auctionHistoryService.getAuctioningProductIdByUserId(userId, page, size);
+        return productIdPage.map(this::getById);
+    }
+
+    @Override
     public void addNewProductDescription(String productId, String content) {
         if (this.getById(productId) == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_PRODUCT.getMessage());

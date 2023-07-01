@@ -8,6 +8,7 @@ import com.hcmus.auction.common.variable.SuccessResponse;
 import com.hcmus.auction.controller.definition.UserController;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;
+import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.service.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -52,6 +53,20 @@ public class UserControllerImpl implements UserController {
             throw new GenericException(ErrorMessage.EXCESS_TIMESTAMP_PARAMETERS.getMessage());
         }
         return ResponseEntity.ok(userService.getFavoriteProductsByUserId(userId, page, size, lte, gte));
+    }
+
+    @GetMapping(value = "/{userId}/auctioning")
+    @Override
+    @ApiOperation(value = "Get auctioning product list with pagination")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
+    public ResponseEntity<Page<ProductDTO>> getAuctioningProductsByUserId(
+            @ApiParam(value = "User id needs to get auctioning list") @PathVariable(value = "userId") String userId,
+            @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
+            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) {
+        if (!RequestParamUtil.isValidPageParameters(page, size)) {
+            throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
+        }
+        return ResponseEntity.ok(userService.getAuctioningProductsByUserId(userId, page, size));
     }
 
     @PostMapping(value = "/{userId}/favorite")

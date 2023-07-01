@@ -3,6 +3,7 @@ package com.hcmus.auction.service.impl;
 import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;
+import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.model.dto.UserDTO;
 import com.hcmus.auction.model.entity.User;
 import com.hcmus.auction.model.mapper.UserMapper;
@@ -22,6 +23,7 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
     private final UserMapper userMapper;
     private final FavoriteProductServiceImpl favoriteProductService;
     private final RoleHistoryServiceImpl roleHistoryService;
+    private final ProductServiceImpl productService;
 
     @Override
     public UserDTO getById(String userId) {
@@ -34,6 +36,13 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
         if (this.getById(userId) == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
         return favoriteProductService.getFavoriteProductsByUserId(userId, page, size, lte, gte);
+    }
+
+    @Override
+    public Page<ProductDTO> getAuctioningProductsByUserId(String userId, Integer page, Integer size) {
+        if (this.getById(userId) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+        return productService.getAuctioningProductsByUserId(userId, page, size);
     }
 
     @Override
