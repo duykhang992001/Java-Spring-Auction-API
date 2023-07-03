@@ -69,6 +69,20 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.ok(userService.getAuctioningProductsByUserId(userId, page, size));
     }
 
+    @GetMapping(value = "/{userId}/won")
+    @Override
+    @ApiOperation(value = "Get won product list with pagination")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
+    public ResponseEntity<Page<ProductDTO>> getWonProductsByUserId(
+            @ApiParam(value = "User id needs to get won list") @PathVariable(value = "userId") String userId,
+            @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
+            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) {
+        if (!RequestParamUtil.isValidPageParameters(page, size)) {
+            throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
+        }
+        return ResponseEntity.ok(userService.getWonProductsByUserId(userId, page, size));
+    }
+
     @PostMapping(value = "/{userId}/favorite")
     @Override
     @ApiOperation(value = "Add new product to favorite list")

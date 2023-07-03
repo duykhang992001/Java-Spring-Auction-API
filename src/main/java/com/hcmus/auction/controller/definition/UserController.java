@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 public interface UserController {
     ResponseEntity<Page<FavoriteProductDTO>> getFavoriteProductsByUserId(String userId, Integer page, Integer size, Integer lte, Integer gte);
     ResponseEntity<Page<ProductDTO>> getAuctioningProductsByUserId(String userId, Integer page, Integer size);
+    ResponseEntity<Page<ProductDTO>> getWonProductsByUserId(String userId, Integer page, Integer size);
     ResponseEntity<SuccessResponse> addNewFavoriteProduct(String userId, FavoriteProductRequest favoriteProductRequest);
     ResponseEntity<SuccessResponse> deleteFavoriteProduct(String userId, FavoriteProductRequest favoriteProductRequest);
     ResponseEntity<SuccessResponse> sendRequestToUpgradeRole(String userId);

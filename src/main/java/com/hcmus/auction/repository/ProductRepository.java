@@ -19,6 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     Page<Product> findAllByCategoryIdAndEndTimestampLessThanEqual(String categoryId, Integer endTimestamp, Pageable pageable);
     Page<Product> findAllByCategoryIdAndEndTimestampLessThanEqualAndIdNot(
             String categoryId, Integer endTimestamp, String exclusiveProductId, Pageable pageable);
+    Page<Product> findAllByCurrentWinnerIdAndEndTimestampLessThanEqual(String userId, Integer endTimestamp, Pageable pageable);
 
     @Query(value = "SELECT p.* FROM product p JOIN inner_category ic ON p.inner_category_id = ic.id " +
             "WHERE p.end_timestamp >= ?2 AND (MATCH(ic.name) AGAINST (?1) OR MATCH(p.name) AGAINST (?1))", nativeQuery = true)
