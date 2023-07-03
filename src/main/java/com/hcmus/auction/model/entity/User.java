@@ -56,4 +56,10 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<RoleHistory> roleHistories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sender")
+    private List<Review> reviewsBySelf = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipient")
+    private List<Review> reviewsByOther = new ArrayList<>();
 }

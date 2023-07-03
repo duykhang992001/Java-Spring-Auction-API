@@ -1,9 +1,11 @@
 package com.hcmus.auction.service.impl;
 
 import com.hcmus.auction.common.variable.ErrorMessage;
+import com.hcmus.auction.common.variable.UserPointResponse;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
+import com.hcmus.auction.model.dto.ReviewDTO;
 import com.hcmus.auction.model.dto.UserDTO;
 import com.hcmus.auction.model.entity.User;
 import com.hcmus.auction.model.mapper.UserMapper;
@@ -24,6 +26,7 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
     private final FavoriteProductServiceImpl favoriteProductService;
     private final RoleHistoryServiceImpl roleHistoryService;
     private final ProductServiceImpl productService;
+    private final ReviewServiceImpl reviewService;
 
     @Override
     public UserDTO getById(String userId) {
@@ -71,5 +74,20 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
         if (this.getById(userId) == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
         roleHistoryService.addNewRoleHistory(userId);
+    }
+
+    @Override
+    public Page<ReviewDTO> getReviewsByUserId(String userId, Integer page, Integer size) {
+        if (this.getById(userId) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+        return reviewService.getReviewsByUserId(userId, page, size);
+    }
+
+    @Override
+    public UserPointResponse getPointsByUserId(String userId) {
+        UserDTO user = this.getById(userId);
+        if (user == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+        return new UserPointResponse(user.getNumOfLike(), user.getNumOfDislike());
     }
 }

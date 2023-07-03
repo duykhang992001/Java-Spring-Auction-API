@@ -22,11 +22,12 @@ public class AuctionHistoryServiceImpl implements AuctionHistoryService {
     @Override
     public Page<AuctionHistoryDTO> getAuctionHistoriesByProductId(String productId, Integer page, Integer size, String orderBy) {
         final String SORT_BY = "createdAt";
+        final Boolean isRejected = false;
         Sort sort = orderBy == null || orderBy.equals("desc") ? Sort.by(SORT_BY).descending() : Sort.by(SORT_BY).ascending();
         Pageable pageable = page != null && size != null ?
                 PageRequest.of(page, size, sort) :
                 PageRequest.of(0, Integer.MAX_VALUE, sort);
-        Page<AuctionHistory> auctionHistoryPage = auctionHistoryRepository.findAllByProductId(productId, pageable);
+        Page<AuctionHistory> auctionHistoryPage = auctionHistoryRepository.findAllByProductIdAndIsRejected(productId, isRejected, pageable);
         return auctionHistoryPage.map(auctionHistoryMapper::toDTO);
     }
 

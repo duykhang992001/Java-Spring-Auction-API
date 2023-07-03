@@ -5,10 +5,12 @@ import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.common.variable.FavoriteProductRequest;
 import com.hcmus.auction.common.variable.SuccessMessage;
 import com.hcmus.auction.common.variable.SuccessResponse;
+import com.hcmus.auction.common.variable.UserPointResponse;
 import com.hcmus.auction.controller.definition.UserController;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
+import com.hcmus.auction.model.dto.ReviewDTO;
 import com.hcmus.auction.service.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -115,5 +117,28 @@ public class UserControllerImpl implements UserController {
             @ApiParam(value = "User id needs to send request") @PathVariable(value = "userId") String userId) {
         userService.addNewRoleHistory(userId);
         return ResponseEntity.ok(new SuccessResponse(SuccessMessage.ADD_NEW_ROLE_HISTORY_SUCCESSFULLY.getMessage()));
+    }
+
+    @GetMapping(value = "/{userId}/reviews")
+    @Override
+    @ApiOperation(value = "Get review list with pagination")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
+    public ResponseEntity<Page<ReviewDTO>> getReviewsByUserId(
+            @ApiParam(value = "User id needs to get review list") @PathVariable(value = "userId") String userId,
+            @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
+            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) {
+        if (!RequestParamUtil.isValidPageParameters(page, size)) {
+            throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
+        }
+        return ResponseEntity.ok(userService.getReviewsByUserId(userId, page, size));
+    }
+
+    @GetMapping(value = "/{userId}/points")
+    @Override
+    @ApiOperation(value = "Get user's point")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
+    public ResponseEntity<UserPointResponse> getPointsByUserId(
+            @ApiParam(value = "User id needs to get points") @PathVariable(value = "userId") String userId) {
+        return ResponseEntity.ok(userService.getPointsByUserId(userId));
     }
 }
