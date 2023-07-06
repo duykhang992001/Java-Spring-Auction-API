@@ -3,6 +3,7 @@ package com.hcmus.auction.controller.definition;
 import com.hcmus.auction.common.variable.FavoriteProductRequest;
 import com.hcmus.auction.common.variable.SuccessResponse;
 import com.hcmus.auction.common.variable.UserPointResponse;
+import com.hcmus.auction.model.dto.AccountDTO;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.model.dto.ReviewDTO;
@@ -18,4 +19,5 @@ public interface UserController {
     ResponseEntity<SuccessResponse> sendRequestToUpgradeRole(String userId);
     ResponseEntity<Page<ReviewDTO>> getReviewsByUserId(String userId, Integer page, Integer size);
     ResponseEntity<UserPointResponse> getPointsByUserId(String userId);
+    ResponseEntity<AccountDTO> getProfile(String userId);
 }

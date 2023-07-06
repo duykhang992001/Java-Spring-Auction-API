@@ -8,6 +8,7 @@ import com.hcmus.auction.common.variable.SuccessResponse;
 import com.hcmus.auction.common.variable.UserPointResponse;
 import com.hcmus.auction.controller.definition.UserController;
 import com.hcmus.auction.exception.GenericException;
+import com.hcmus.auction.model.dto.AccountDTO;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.model.dto.ReviewDTO;
@@ -140,5 +141,14 @@ public class UserControllerImpl implements UserController {
     public ResponseEntity<UserPointResponse> getPointsByUserId(
             @ApiParam(value = "User id needs to get points") @PathVariable(value = "userId") String userId) {
         return ResponseEntity.ok(userService.getPointsByUserId(userId));
+    }
+
+    @GetMapping(value = "/{userId}/profile")
+    @Override
+    @ApiOperation(value = "Get user's profile")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
+    public ResponseEntity<AccountDTO> getProfile(
+            @ApiParam(value = "User id needs to get profile") @PathVariable(value = "userId") String userId) {
+        return ResponseEntity.ok(userService.getProfile(userId));
     }
 }

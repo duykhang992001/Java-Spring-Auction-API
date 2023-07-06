@@ -3,6 +3,7 @@ package com.hcmus.auction.service.impl;
 import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.common.variable.UserPointResponse;
 import com.hcmus.auction.exception.GenericException;
+import com.hcmus.auction.model.dto.AccountDTO;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.model.dto.ReviewDTO;
@@ -27,6 +28,7 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
     private final RoleHistoryServiceImpl roleHistoryService;
     private final ProductServiceImpl productService;
     private final ReviewServiceImpl reviewService;
+    private final AccountServiceImpl accountService;
 
     @Override
     public UserDTO getById(String userId) {
@@ -89,5 +91,12 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
         if (user == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
         return new UserPointResponse(user.getNumOfLike(), user.getNumOfDislike());
+    }
+
+    @Override
+    public AccountDTO getProfile(String userId) {
+        if (this.getById(userId) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+        return accountService.getById(userId);
     }
 }
