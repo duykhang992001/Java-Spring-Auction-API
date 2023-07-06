@@ -1,6 +1,7 @@
 package com.hcmus.auction.service.impl;
 
 import com.hcmus.auction.common.variable.ErrorMessage;
+import com.hcmus.auction.common.variable.ProfileRequest;
 import com.hcmus.auction.common.variable.UserPointResponse;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.AccountDTO;
@@ -98,5 +99,21 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
         if (this.getById(userId) == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
         return accountService.getById(userId);
+    }
+
+    @Override
+    public void updateProfile(String userId, ProfileRequest newProfile) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        User user = userOptional.orElse(null);
+
+        if (user != null) {
+            accountService.updateEmail(userId, newProfile.getEmail());
+            user.setAddress(newProfile.getAddress());
+            user.setName(newProfile.getName());
+            userRepository.save(user);
+        } else {
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package com.hcmus.auction.service.definition;
 
+import com.hcmus.auction.common.variable.ProfileRequest;
 import com.hcmus.auction.common.variable.UserPointResponse;
 import com.hcmus.auction.model.dto.AccountDTO;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;
@@ -17,4 +18,5 @@ public interface UserService {
     Page<ReviewDTO> getReviewsByUserId(String userId, Integer page, Integer size);
     UserPointResponse getPointsByUserId(String userId);
     AccountDTO getProfile(String userId);
+    void updateProfile(String userId, ProfileRequest newProfile);
 }

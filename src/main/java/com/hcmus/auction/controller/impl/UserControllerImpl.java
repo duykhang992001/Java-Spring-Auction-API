@@ -3,6 +3,7 @@ package com.hcmus.auction.controller.impl;
 import com.hcmus.auction.common.util.RequestParamUtil;
 import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.common.variable.FavoriteProductRequest;
+import com.hcmus.auction.common.variable.ProfileRequest;
 import com.hcmus.auction.common.variable.SuccessMessage;
 import com.hcmus.auction.common.variable.SuccessResponse;
 import com.hcmus.auction.common.variable.UserPointResponse;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -150,5 +152,16 @@ public class UserControllerImpl implements UserController {
     public ResponseEntity<AccountDTO> getProfile(
             @ApiParam(value = "User id needs to get profile") @PathVariable(value = "userId") String userId) {
         return ResponseEntity.ok(userService.getProfile(userId));
+    }
+
+    @PutMapping(value = "/{userId}/profile")
+    @Override
+    @ApiOperation(value = "Update user's profile")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Update successfully"), @ApiResponse(code = 400, message = "Update failed") })
+    public ResponseEntity<SuccessResponse> updateProfile(
+            @ApiParam(value = "User id needs to update profile") @PathVariable(value = "userId") String userId,
+            @ApiParam(value = "New profile needs to be updated") @RequestBody ProfileRequest newProfile) {
+        userService.updateProfile(userId, newProfile);
+        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.UPDATE_PROFILE_SUCCESSFULLY.getMessage()));
     }
 }

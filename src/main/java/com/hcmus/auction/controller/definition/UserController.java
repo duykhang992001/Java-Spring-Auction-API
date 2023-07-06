@@ -1,6 +1,7 @@
 package com.hcmus.auction.controller.definition;
 
 import com.hcmus.auction.common.variable.FavoriteProductRequest;
+import com.hcmus.auction.common.variable.ProfileRequest;
 import com.hcmus.auction.common.variable.SuccessResponse;
 import com.hcmus.auction.common.variable.UserPointResponse;
 import com.hcmus.auction.model.dto.AccountDTO;
@@ -20,4 +21,5 @@ public interface UserController {
     ResponseEntity<Page<ReviewDTO>> getReviewsByUserId(String userId, Integer page, Integer size);
     ResponseEntity<UserPointResponse> getPointsByUserId(String userId);
     ResponseEntity<AccountDTO> getProfile(String userId);
+    ResponseEntity<SuccessResponse> updateProfile(String userId, ProfileRequest newProfile);
 }
