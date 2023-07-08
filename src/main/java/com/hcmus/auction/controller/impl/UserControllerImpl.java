@@ -2,11 +2,11 @@ package com.hcmus.auction.controller.impl;
 
 import com.hcmus.auction.common.util.RequestParamUtil;
 import com.hcmus.auction.common.variable.ErrorMessage;
-import com.hcmus.auction.common.variable.FavoriteProductRequest;
-import com.hcmus.auction.common.variable.ProfileRequest;
+import com.hcmus.auction.common.variable.request.FavoriteProductRequest;
+import com.hcmus.auction.common.variable.request.ProfileRequest;
 import com.hcmus.auction.common.variable.SuccessMessage;
-import com.hcmus.auction.common.variable.SuccessResponse;
-import com.hcmus.auction.common.variable.UserPointResponse;
+import com.hcmus.auction.common.variable.response.SuccessResponse;
+import com.hcmus.auction.common.variable.response.UserPointResponse;
 import com.hcmus.auction.controller.definition.UserController;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.AccountDTO;
@@ -119,7 +119,7 @@ public class UserControllerImpl implements UserController {
     public ResponseEntity<SuccessResponse> sendRequestToUpgradeRole(
             @ApiParam(value = "User id needs to send request") @PathVariable(value = "userId") String userId) {
         userService.addNewRoleHistory(userId);
-        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.ADD_NEW_ROLE_HISTORY_SUCCESSFULLY.getMessage()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(SuccessMessage.ADD_NEW_ROLE_HISTORY_SUCCESSFULLY.getMessage()));
     }
 
     @GetMapping(value = "/{userId}/reviews")

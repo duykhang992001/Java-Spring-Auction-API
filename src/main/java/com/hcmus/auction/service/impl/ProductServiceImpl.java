@@ -3,33 +3,54 @@ package com.hcmus.auction.service.impl;
 import com.hcmus.auction.common.util.RequestParamUtil;
 import com.hcmus.auction.common.util.TimeUtil;
 import com.hcmus.auction.common.variable.ErrorMessage;
+import com.hcmus.auction.common.variable.request.ProductRequest;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.AuctionHistoryDTO;
+import com.hcmus.auction.model.dto.ImageDTO;
+import com.hcmus.auction.model.dto.InnerCategoryDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
+import com.hcmus.auction.model.dto.UserDTO;
 import com.hcmus.auction.model.entity.Product;
 import com.hcmus.auction.model.mapper.ProductMapper;
 import com.hcmus.auction.repository.ProductRepository;
 import com.hcmus.auction.service.definition.GenericService;
 import com.hcmus.auction.service.definition.PaginationService;
 import com.hcmus.auction.service.definition.ProductService;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
-@AllArgsConstructor
 public class ProductServiceImpl implements PaginationService<ProductDTO>,
         GenericService<ProductDTO, String>,
         ProductService {
-    private final ProductRepository productRepository;
-    private final ProductMapper productMapper;
-    private final AuctionHistoryServiceImpl auctionHistoryService;
-    private final DescriptionHistoryServiceImpl descriptionHistoryService;
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private ProductMapper productMapper;
+
+    @Autowired
+    private AuctionHistoryServiceImpl auctionHistoryService;
+
+    @Autowired
+    private DescriptionHistoryServiceImpl descriptionHistoryService;
+
+    @Autowired
+    private InnerCategoryServiceImpl innerCategoryService;
+
+    @Autowired
+    private UserServiceImpl userService;
+
+    @Autowired
+    private ImageServiceImpl imageService;
 
     @Override
     public Page<ProductDTO> getAll(Integer page, Integer size, String sortBy, String orderBy, String keyword, Integer lte, Integer gte) {
@@ -95,5 +116,51 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
         if (this.getById(productId) == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_PRODUCT.getMessage());
         descriptionHistoryService.addNewProductDescription(productId, content);
+    }
+
+    @Override
+    public void addNewProduct(ProductRequest product) {
+        if (product.getEndTimestamp() < product.getStartTimestamp())
+            throw new GenericException(ErrorMessage.END_TIMESTAMP_LESS_THAN_START_TIMESTAMP.getMessage());
+
+        if (product.getBuyNowPrice() != null && product.getBuyNowPrice() < product.getCurrentPrice())
+            throw new GenericException(ErrorMessage.BUY_NOW_PRICE_LESS_THAN_CURRENT_PRICE.getMessage());
+
+        if (innerCategoryService.getById(product.getCategoryId()) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_INNER_CATEGORY.getMessage());
+
+        if (userService.getById(product.getOwnerId()) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+
+        String productId = UUID.randomUUID().toString();
+        ProductDTO productDTO = new ProductDTO();
+        UserDTO owner = new UserDTO();
+        InnerCategoryDTO innerCategoryDTO = new InnerCategoryDTO();
+        List<ImageDTO> imageDTOs = product.getImages().stream()
+                .map(image -> new ImageDTO(
+                        UUID.randomUUID().toString(),
+                        image.getUrl(),
+                        image.getIsThumbnailImage(),
+                        productId))
+                .toList();
+
+        owner.setId(product.getOwnerId());
+        innerCategoryDTO.setId(product.getCategoryId());
+        productDTO.setId(productId);
+        productDTO.setName(product.getName());
+        productDTO.setNumOfBid(0);
+        productDTO.setIsAutoExtendTime(product.getIsAutoExtendTime());
+        productDTO.setAdditionalPrice(product.getAdditionalPrice());
+        productDTO.setStartTimestamp(product.getStartTimestamp());
+        productDTO.setEndTimestamp(product.getEndTimestamp());
+        productDTO.setBuyNowPrice(product.getBuyNowPrice());
+        productDTO.setCurrentPrice(product.getCurrentPrice());
+        productDTO.setCurrentWinner(null);
+        productDTO.setOwner(owner);
+        productDTO.setCategory(innerCategoryDTO);
+
+        productRepository.save(productMapper.toEntity(productDTO));
+        descriptionHistoryService.addNewProductDescription(productId, product.getDescription());
+        imageService.addListOfImages(imageDTOs);
     }
 }

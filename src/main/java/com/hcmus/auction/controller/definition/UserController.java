@@ -1,9 +1,9 @@
 package com.hcmus.auction.controller.definition;
 
-import com.hcmus.auction.common.variable.FavoriteProductRequest;
-import com.hcmus.auction.common.variable.ProfileRequest;
-import com.hcmus.auction.common.variable.SuccessResponse;
-import com.hcmus.auction.common.variable.UserPointResponse;
+import com.hcmus.auction.common.variable.request.FavoriteProductRequest;
+import com.hcmus.auction.common.variable.request.ProfileRequest;
+import com.hcmus.auction.common.variable.response.SuccessResponse;
+import com.hcmus.auction.common.variable.response.UserPointResponse;
 import com.hcmus.auction.model.dto.AccountDTO;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;
 import com.hcmus.auction.model.dto.ProductDTO;

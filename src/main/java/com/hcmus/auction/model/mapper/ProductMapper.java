@@ -1,14 +1,34 @@
 package com.hcmus.auction.model.mapper;
 
 import com.hcmus.auction.model.dto.ProductDTO;
+import com.hcmus.auction.model.entity.InnerCategory;
 import com.hcmus.auction.model.entity.Product;
+import com.hcmus.auction.model.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProductMapper implements GenericMapper<Product, ProductDTO> {
     @Override
     public Product toEntity(ProductDTO productDTO) {
-        return null;
+        Product product = new Product();
+        User user = new User();
+        InnerCategory category = new InnerCategory();
+
+        user.setId(productDTO.getOwner().getId());
+        category.setId(productDTO.getCategory().getId());
+        product.setId(productDTO.getId());
+        product.setName(productDTO.getName());
+        product.setCurrentPrice(productDTO.getCurrentPrice());
+        product.setBuyNowPrice(productDTO.getBuyNowPrice());
+        product.setNumOfBid(productDTO.getNumOfBid());
+        product.setAdditionalPrice(productDTO.getAdditionalPrice());
+        product.setStartTimestamp(productDTO.getStartTimestamp());
+        product.setEndTimestamp(productDTO.getEndTimestamp());
+        product.setIsAutoExtendTime(productDTO.getIsAutoExtendTime());
+        product.setOwner(user);
+        product.setCategory(category);
+
+        return product;
     }
 
     @Override

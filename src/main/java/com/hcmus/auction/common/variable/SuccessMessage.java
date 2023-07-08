@@ -5,6 +5,7 @@ public enum SuccessMessage {
     DELETE_FAVORITE_PRODUCT_SUCCESSFULLY("Delete favorite product successfully!"),
     ADD_NEW_ROLE_HISTORY_SUCCESSFULLY("Send upgrade role request successfully!"),
     ADD_NEW_PRODUCT_DESCRIPTION_SUCCESSFULLY("Add new product description successfully!"),
+    ADD_NEW_PRODUCT_SUCCESSFULLY("Add new product successfully"),
     UPDATE_PROFILE_SUCCESSFULLY("Update profile successfully!");
 
     SuccessMessage(String message) {

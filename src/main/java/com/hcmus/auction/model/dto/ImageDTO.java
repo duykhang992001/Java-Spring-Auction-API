@@ -19,4 +19,8 @@ public class ImageDTO {
     @JsonProperty(value = "is_thumbnail_image")
     @ApiModelProperty(value = "Whether image is thumbnail or not", example = "true")
     private Boolean isThumbnailImage;
+
+    @JsonProperty(value = "product_id")
+    @ApiModelProperty(value = "Product id of image", example = "0a6eaf66-1339-4471-b1af-64ba9c628ff6")
+    private String productId;
 }

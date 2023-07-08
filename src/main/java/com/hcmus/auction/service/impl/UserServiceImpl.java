@@ -1,8 +1,8 @@
 package com.hcmus.auction.service.impl;
 
 import com.hcmus.auction.common.variable.ErrorMessage;
-import com.hcmus.auction.common.variable.ProfileRequest;
-import com.hcmus.auction.common.variable.UserPointResponse;
+import com.hcmus.auction.common.variable.request.ProfileRequest;
+import com.hcmus.auction.common.variable.response.UserPointResponse;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.AccountDTO;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;

@@ -1,4 +1,4 @@
-package com.hcmus.auction.common.variable;
+package com.hcmus.auction.common.variable.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

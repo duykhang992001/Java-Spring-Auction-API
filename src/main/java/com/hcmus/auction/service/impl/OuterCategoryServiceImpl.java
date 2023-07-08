@@ -5,7 +5,7 @@ import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.model.entity.OuterCategory;
 import com.hcmus.auction.model.mapper.OuterCategoryMapper;
 import com.hcmus.auction.repository.OuterCategoryRepository;
-import com.hcmus.auction.service.definition.CategoryService;
+import com.hcmus.auction.service.definition.OuterCategoryService;
 import com.hcmus.auction.service.definition.GenericService;
 import com.hcmus.auction.service.definition.UnPaginationService;
 import lombok.AllArgsConstructor;
@@ -17,9 +17,9 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class CategoryServiceImpl implements UnPaginationService<OuterCategoryDTO>,
+public class OuterCategoryServiceImpl implements UnPaginationService<OuterCategoryDTO>,
         GenericService<OuterCategoryDTO, String>,
-        CategoryService {
+        OuterCategoryService {
     private final OuterCategoryRepository outerCategoryRepository;
     private final OuterCategoryMapper outerCategoryMapper;
     private final ProductServiceImpl productService;

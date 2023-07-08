@@ -1,7 +1,7 @@
 package com.hcmus.auction.controller.impl;
 
 import com.hcmus.auction.common.util.RequestParamUtil;
-import com.hcmus.auction.common.variable.EmptyResponse;
+import com.hcmus.auction.common.variable.response.EmptyResponse;
 import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.controller.definition.CategoryController;
 import com.hcmus.auction.controller.definition.GenericController;
@@ -9,7 +9,7 @@ import com.hcmus.auction.controller.definition.UnPaginationController;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.OuterCategoryDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
-import com.hcmus.auction.service.impl.CategoryServiceImpl;
+import com.hcmus.auction.service.impl.OuterCategoryServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,7 +33,7 @@ import java.util.List;
 public class CategoryControllerImpl implements UnPaginationController<OuterCategoryDTO>,
         GenericController<OuterCategoryDTO, String>,
         CategoryController {
-    private final CategoryServiceImpl categoryService;
+    private final OuterCategoryServiceImpl categoryService;
 
     @GetMapping
     @Override

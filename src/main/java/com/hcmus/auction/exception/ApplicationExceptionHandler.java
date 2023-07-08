@@ -1,6 +1,6 @@
 package com.hcmus.auction.exception;
 
-import com.hcmus.auction.common.variable.ErrorResponse;
+import com.hcmus.auction.common.variable.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,4 +17,9 @@ public class ApplicationExceptionHandler {
     public ResponseEntity<ErrorResponse> handleGenericException(GenericException exception) {
         return new ResponseEntity<>(new ErrorResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
     }
+
+//    @ExceptionHandler(value = NullPointerException.class)
+//    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException exception) {
+//        return new ResponseEntity<>(new ErrorResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+//    }
 }

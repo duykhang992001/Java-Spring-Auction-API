@@ -1,11 +1,12 @@
 package com.hcmus.auction.controller.impl;
 
 import com.hcmus.auction.common.util.RequestParamUtil;
-import com.hcmus.auction.common.variable.DescriptionHistoryRequest;
-import com.hcmus.auction.common.variable.EmptyResponse;
+import com.hcmus.auction.common.variable.request.DescriptionHistoryRequest;
+import com.hcmus.auction.common.variable.request.ProductRequest;
+import com.hcmus.auction.common.variable.response.EmptyResponse;
 import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.common.variable.SuccessMessage;
-import com.hcmus.auction.common.variable.SuccessResponse;
+import com.hcmus.auction.common.variable.response.SuccessResponse;
 import com.hcmus.auction.controller.definition.GenericController;
 import com.hcmus.auction.controller.definition.PaginationController;
 import com.hcmus.auction.controller.definition.ProductController;
@@ -113,6 +114,17 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>,
             @ApiParam(value = "Product id needs to add description") @PathVariable(value = "productId") String productId,
             @ApiParam(value = "Description needs to be added") @RequestBody DescriptionHistoryRequest descriptionHistoryRequest) {
         productService.addNewProductDescription(productId, descriptionHistoryRequest.getContent());
-        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.ADD_NEW_PRODUCT_DESCRIPTION_SUCCESSFULLY.getMessage()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(SuccessMessage.ADD_NEW_PRODUCT_DESCRIPTION_SUCCESSFULLY.getMessage()));
+    }
+
+    @PostMapping
+    @Override
+    @ApiOperation(value = "Add new product")
+    @ApiResponses(value = { @ApiResponse(code = 201, message = "Add successfully"), @ApiResponse(code = 400, message = "Add failed") })
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public ResponseEntity<SuccessResponse> addNewProduct(
+            @RequestBody ProductRequest product) {
+        productService.addNewProduct(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(SuccessMessage.ADD_NEW_PRODUCT_SUCCESSFULLY.getMessage()));
     }
 }
