@@ -12,4 +12,5 @@ Current progress:
 - 2.5: POST /api/v1/users/{userId}/roles/histories
 - 3.1: POST /api/v1/products with request body { name: "", current_price: , additional_price: , buy_now_price: , category_id: "", owner_id: "", is_auto_extend_time: , start_timestamp: , end_timestamp: , description: "", images: [ { is_thumbnail_image: , url: "" } ] }
 - 3.2: POST /api/v1/products/{productId}/descriptions with request body { content: "" }
+- 3.4: GET /api/v1/users/{userId}/ended?page={page}&size={size}
 - 5.2: PUT /api/v1/users/{userId}/profile with request body { email: "", name: "", address: "" }
