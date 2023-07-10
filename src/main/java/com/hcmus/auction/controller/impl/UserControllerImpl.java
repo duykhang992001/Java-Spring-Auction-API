@@ -92,14 +92,14 @@ public class UserControllerImpl implements UserController {
     @Override
     @ApiOperation(value = "Get ended own product list with pagination")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
-    public ResponseEntity<Page<ProductDTO>> getEndedOwnProductsByUserId(
+    public ResponseEntity<Page<ProductDTO>> getExpiredOwnProductsByUserId(
             @ApiParam(value = "User id needs to get ended own products") @PathVariable(value = "userId") String userId,
             @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
             @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) {
         if (!RequestParamUtil.isValidPageParameters(page, size)) {
             throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
         }
-        return ResponseEntity.ok(userService.getEndedOwnProductsByUserId(userId, page, size));
+        return ResponseEntity.ok(userService.getExpiredOwnProductsByUserId(userId, page, size));
     }
 
     @PostMapping(value = "/{userId}/favorite")

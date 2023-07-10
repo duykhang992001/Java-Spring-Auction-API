@@ -112,7 +112,7 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
     }
 
     @Override
-    public Page<ProductDTO> getEndedOwnProductsByUserId(String userId, Integer page, Integer size) {
+    public Page<ProductDTO> getExpiredOwnProductsByUserId(String userId, Integer page, Integer size) {
         Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
         Pageable pageable = page != null && size != null ? PageRequest.of(page, size) : Pageable.unpaged();
         Page<Product> productPage = productRepository.findAllByOwnerIdAndEndTimestampLessThanEqual(userId, currentTimestamp, pageable);

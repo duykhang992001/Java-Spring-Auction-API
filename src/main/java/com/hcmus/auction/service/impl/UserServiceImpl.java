@@ -59,10 +59,10 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
     }
 
     @Override
-    public Page<ProductDTO> getEndedOwnProductsByUserId(String userId, Integer page, Integer size) {
+    public Page<ProductDTO> getExpiredOwnProductsByUserId(String userId, Integer page, Integer size) {
         if (this.getById(userId) == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
-        return productService.getEndedOwnProductsByUserId(userId, page, size);
+        return productService.getExpiredOwnProductsByUserId(userId, page, size);
     }
 
     @Override

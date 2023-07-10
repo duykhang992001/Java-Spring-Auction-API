@@ -10,7 +10,7 @@ public interface ProductService {
     Page<AuctionHistoryDTO> getAuctionHistoriesByProductId(String productId, Integer page, Integer size, String orderBy);
     Page<ProductDTO> getAuctioningProductsByUserId(String userId, Integer page, Integer size);
     Page<ProductDTO> getWonProductsByUserId(String userId, Integer page, Integer size);
-    Page<ProductDTO> getEndedOwnProductsByUserId(String userId, Integer page, Integer size);
+    Page<ProductDTO> getExpiredOwnProductsByUserId(String userId, Integer page, Integer size);
     void addNewProductDescription(String productId, String content);
     void addNewProduct(ProductRequest product);
 }
