@@ -120,6 +120,14 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
     }
 
     @Override
+    public Page<ProductDTO> getActiveOwnProductsByUserId(String userId, Integer page, Integer size) {
+        Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
+        Pageable pageable = page != null && size != null ? PageRequest.of(page, size) : Pageable.unpaged();
+        Page<Product> productPage = productRepository.findAllByOwnerIdAndEndTimestampGreaterThanEqual(userId, currentTimestamp, pageable);
+        return productPage.map(productMapper::toDTO);
+    }
+
+    @Override
     public void addNewProductDescription(String productId, String content) {
         if (this.getById(productId) == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_PRODUCT.getMessage());

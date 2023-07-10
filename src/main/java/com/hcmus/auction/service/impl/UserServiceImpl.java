@@ -66,6 +66,13 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
     }
 
     @Override
+    public Page<ProductDTO> getActiveOwnProductsByUserId(String userId, Integer page, Integer size) {
+        if (this.getById(userId) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+        return productService.getActiveOwnProductsByUserId(userId, page, size);
+    }
+
+    @Override
     public void addNewFavoriteProduct(String userId, String productId) {
         if (this.getById(userId) == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());

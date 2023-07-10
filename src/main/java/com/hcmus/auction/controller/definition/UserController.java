@@ -16,6 +16,7 @@ public interface UserController {
     ResponseEntity<Page<ProductDTO>> getAuctioningProductsByUserId(String userId, Integer page, Integer size);
     ResponseEntity<Page<ProductDTO>> getWonProductsByUserId(String userId, Integer page, Integer size);
     ResponseEntity<Page<ProductDTO>> getExpiredOwnProductsByUserId(String userId, Integer page, Integer size);
+    ResponseEntity<Page<ProductDTO>> getActiveOwnProductsByUserId(String userId, Integer page, Integer size);
     ResponseEntity<SuccessResponse> addNewFavoriteProduct(String userId, FavoriteProductRequest favoriteProductRequest);
     ResponseEntity<SuccessResponse> deleteFavoriteProduct(String userId, FavoriteProductRequest favoriteProductRequest);
     ResponseEntity<SuccessResponse> sendRequestToUpgradeRole(String userId);

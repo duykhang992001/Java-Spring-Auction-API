@@ -88,18 +88,32 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.ok(userService.getWonProductsByUserId(userId, page, size));
     }
 
-    @GetMapping(value = "/{userId}/ended")
+    @GetMapping(value = "/{userId}/expired")
     @Override
-    @ApiOperation(value = "Get ended own product list with pagination")
+    @ApiOperation(value = "Get expired own product list with pagination")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
     public ResponseEntity<Page<ProductDTO>> getExpiredOwnProductsByUserId(
-            @ApiParam(value = "User id needs to get ended own products") @PathVariable(value = "userId") String userId,
+            @ApiParam(value = "User id needs to get expired own products") @PathVariable(value = "userId") String userId,
             @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
             @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) {
         if (!RequestParamUtil.isValidPageParameters(page, size)) {
             throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
         }
         return ResponseEntity.ok(userService.getExpiredOwnProductsByUserId(userId, page, size));
+    }
+
+    @GetMapping(value = "/{userId}/active")
+    @Override
+    @ApiOperation(value = "Get active own product list with pagination")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
+    public ResponseEntity<Page<ProductDTO>> getActiveOwnProductsByUserId(
+            @ApiParam(value = "User id needs to get active own products") @PathVariable(value = "userId") String userId,
+            @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
+            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) {
+        if (!RequestParamUtil.isValidPageParameters(page, size)) {
+            throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
+        }
+        return ResponseEntity.ok(userService.getActiveOwnProductsByUserId(userId, page, size));
     }
 
     @PostMapping(value = "/{userId}/favorite")

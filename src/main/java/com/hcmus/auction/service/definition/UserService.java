@@ -13,6 +13,7 @@ public interface UserService {
     Page<ProductDTO> getAuctioningProductsByUserId(String userId, Integer page, Integer size);
     Page<ProductDTO> getWonProductsByUserId(String userId, Integer page, Integer size);
     Page<ProductDTO> getExpiredOwnProductsByUserId(String userId, Integer page, Integer size);
+    Page<ProductDTO> getActiveOwnProductsByUserId(String userId, Integer page, Integer size);
     void addNewFavoriteProduct(String userId, String productId);
     void deleteFavoriteProduct(String userId, String productId);
     void addNewRoleHistory(String userId);
