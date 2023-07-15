@@ -1,5 +1,6 @@
 package com.hcmus.auction.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,4 +15,8 @@ public class InnerCategoryDTO {
 
     @ApiModelProperty(value = "Inner category name", example = "Laptops and Notebooks")
     private String name;
+
+    @ApiModelProperty(value = "Outer category id", example = "b8b1a65b-8597-47b4-ae1b-ec4210c320f2")
+    @JsonProperty(value = "outer_category_id")
+    private String outerCategoryId;
 }

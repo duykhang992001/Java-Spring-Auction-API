@@ -188,7 +188,7 @@ public class UserControllerImpl implements UserController {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Update successfully"), @ApiResponse(code = 400, message = "Update failed") })
     public ResponseEntity<SuccessResponse> updateProfile(
             @ApiParam(value = "User id needs to update profile") @PathVariable(value = "userId") String userId,
-            @ApiParam(value = "New profile needs to be updated") @RequestBody ProfileRequest newProfile) {
+            @ApiParam(value = "New profile") @RequestBody ProfileRequest newProfile) {
         userService.updateProfile(userId, newProfile);
         return ResponseEntity.ok(new SuccessResponse(SuccessMessage.UPDATE_PROFILE_SUCCESSFULLY.getMessage()));
     }

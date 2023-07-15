@@ -1,5 +1,6 @@
 package com.hcmus.auction.model.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,6 +24,6 @@ public class OuterCategory {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "outerCategory")
+    @OneToMany(mappedBy = "outerCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InnerCategory> innerCategories = new ArrayList<>();
 }

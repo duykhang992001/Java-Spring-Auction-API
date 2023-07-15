@@ -12,10 +12,12 @@ public enum ErrorMessage {
     NOT_EXISTED_USER("This user does not exist!"),
     NOT_EXISTED_ACCOUNT("This account does not exist!"),
     NOT_EXISTED_INNER_CATEGORY("This inner category does not exist!"),
+    NOT_EXISTED_OUTER_CATEGORY("This outer category does not exist!"),
     EXISTED_EMAIL("This email existed in the system!"),
     EXITED_FAVORITE_PRODUCT("This product has already existed in your watch list!"),
     NOT_EXISTED_FAVORITE_PRODUCT("This product has not already been existed in your watch list!"),
-    CAN_NOT_UPGRADE_ROLE("Currently, you can not upgrade your role to seller! Maybe you are having a pending request or you are currently the seller");
+    CAN_NOT_UPGRADE_ROLE("Currently, you can not upgrade your role to seller! Maybe you are having a pending request or you are currently the seller"),
+    CAN_NOT_DELETE_CATEGORY_CONTAINING_PRODUCT("Can not delete category containing any products!");
 
     ErrorMessage(String message) {
         this.message = message;

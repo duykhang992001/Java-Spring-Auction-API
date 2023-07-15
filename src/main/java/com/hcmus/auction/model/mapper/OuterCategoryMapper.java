@@ -8,7 +8,12 @@ import org.springframework.stereotype.Component;
 public class OuterCategoryMapper implements GenericMapper<OuterCategory, OuterCategoryDTO> {
     @Override
     public OuterCategory toEntity(OuterCategoryDTO outerCategoryDTO) {
-        return null;
+        OuterCategory outerCategory = new OuterCategory();
+
+        outerCategory.setId(outerCategoryDTO.getId());
+        outerCategory.setName(outerCategoryDTO.getName());
+
+        return outerCategory;
     }
 
     @Override
