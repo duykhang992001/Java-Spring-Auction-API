@@ -12,7 +12,8 @@ public enum SuccessMessage {
     UPDATE_OUTER_CATEGORY_SUCCESSFULLY("Update outer category successfully!"),
     UPDATE_INNER_CATEGORY_SUCCESSFULLY("Update inner category successfully!"),
     DELETE_OUTER_CATEGORY_SUCCESSFULLY("Delete outer category successfully!"),
-    DELETE_INNER_CATEGORY_SUCCESSFULLY("Delete inner category successfully!");
+    DELETE_INNER_CATEGORY_SUCCESSFULLY("Delete inner category successfully!"),
+    DELETE_PRODUCT_SUCCESSFULLY("Delete product successfully!");
 
     SuccessMessage(String message) {
         this.message = message;

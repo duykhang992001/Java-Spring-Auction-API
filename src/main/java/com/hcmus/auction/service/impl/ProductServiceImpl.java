@@ -179,4 +179,11 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
         descriptionHistoryService.addNewProductDescription(productId, product.getDescription());
         imageService.addListOfImages(imageDTOs);
     }
+
+    @Override
+    public void deleteProductById(String productId) {
+        if (this.getById(productId) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_PRODUCT.getMessage());
+        productRepository.deleteById(productId);
+    }
 }

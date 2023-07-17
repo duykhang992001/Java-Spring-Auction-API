@@ -14,4 +14,5 @@ public interface ProductService {
     Page<ProductDTO> getActiveOwnProductsByUserId(String userId, Integer page, Integer size);
     void addNewProductDescription(String productId, String content);
     void addNewProduct(ProductRequest product);
+    void deleteProductById(String productId);
 }

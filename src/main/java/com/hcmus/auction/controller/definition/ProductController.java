@@ -11,4 +11,5 @@ public interface ProductController {
     ResponseEntity<Page<AuctionHistoryDTO>> getAuctionHistoriesByProductId(String productId, Integer page, Integer size, String orderBy);
     ResponseEntity<SuccessResponse> addNewProductDescription(String productId, DescriptionHistoryRequest descriptionHistoryRequest);
     ResponseEntity<SuccessResponse> addNewProduct(ProductRequest product);
+    ResponseEntity<SuccessResponse> deleteProductById(String productId);
 }

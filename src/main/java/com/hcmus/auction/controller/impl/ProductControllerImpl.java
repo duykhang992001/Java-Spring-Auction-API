@@ -23,6 +23,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -126,5 +127,15 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>,
             @RequestBody ProductRequest product) {
         productService.addNewProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(SuccessMessage.ADD_NEW_PRODUCT_SUCCESSFULLY.getMessage()));
+    }
+
+    @DeleteMapping(value = "/{productId}")
+    @Override
+    @ApiOperation(value = "Delete product")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Delete successfully"), @ApiResponse(code = 400, message = "Delete failed") })
+    public ResponseEntity<SuccessResponse> deleteProductById(
+            @ApiParam(value = "Product id needs to delete") @PathVariable(value = "productId") String productId) {
+        productService.deleteProductById(productId);
+        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.DELETE_PRODUCT_SUCCESSFULLY.getMessage()));
     }
 }
