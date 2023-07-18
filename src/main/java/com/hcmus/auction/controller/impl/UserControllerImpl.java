@@ -13,6 +13,7 @@ import com.hcmus.auction.model.dto.AccountDTO;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.model.dto.ReviewDTO;
+import com.hcmus.auction.model.dto.RoleHistoryDTO;
 import com.hcmus.auction.service.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -116,6 +117,19 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.ok(userService.getActiveOwnProductsByUserId(userId, page, size));
     }
 
+    @GetMapping(value = "/roles/requests")
+    @Override
+    @ApiOperation(value = "Get all unaccepted role requests with pagination")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
+    public ResponseEntity<Page<RoleHistoryDTO>> getUnacceptedUpgradeRequests(
+            @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
+            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) {
+        if (!RequestParamUtil.isValidPageParameters(page, size)) {
+            throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
+        }
+        return ResponseEntity.ok(userService.getUnacceptedUpgradeRequests(page, size));
+    }
+
     @PostMapping(value = "/{userId}/favorite")
     @Override
     @ApiOperation(value = "Add new product to favorite list")
@@ -139,7 +153,7 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.ok(new SuccessResponse(SuccessMessage.DELETE_FAVORITE_PRODUCT_SUCCESSFULLY.getMessage()));
     }
 
-    @PostMapping(value = "/{userId}/roles/histories")
+    @PostMapping(value = "/{userId}/roles/requests")
     @Override
     @ApiOperation(value = "Send a upgraded role request")
     @ApiResponses(value = { @ApiResponse(code = 201, message = "Send successfully"), @ApiResponse(code = 400, message = "Send failed") })

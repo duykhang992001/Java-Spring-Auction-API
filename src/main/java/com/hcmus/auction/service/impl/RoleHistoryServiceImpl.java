@@ -24,6 +24,17 @@ public class RoleHistoryServiceImpl implements RoleHistoryService {
     private RoleHistoryMapper roleHistoryMapper;
 
     @Override
+    public Page<RoleHistoryDTO> getUnacceptedUpgradeRequests(Integer page, Integer size) {
+        final String SORT_BY = "createdAt";
+        final Boolean isUpgraded = true;
+        Pageable pageable = page != null && size != null ?
+                PageRequest.of(page, size, Sort.by(SORT_BY).descending()) :
+                PageRequest.of(0, Integer.MAX_VALUE, Sort.by(SORT_BY).descending());
+        Page<RoleHistory> roleHistoryPage = roleHistoryRepository.findAllByIsAcceptedAndIsUpgraded(null, isUpgraded, pageable);
+        return roleHistoryPage.map(roleHistoryMapper::toDTO);
+    }
+
+    @Override
     public void addNewRoleHistory(String userId) {
         final String SORT_BY = "createdAt";
         final int PAGE = 0, SIZE = 1, TIMESTAMP_DIFF_IN_7_DAYS = 604800;

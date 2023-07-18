@@ -8,6 +8,7 @@ import com.hcmus.auction.model.dto.AccountDTO;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.model.dto.ReviewDTO;
+import com.hcmus.auction.model.dto.RoleHistoryDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
@@ -17,6 +18,7 @@ public interface UserController {
     ResponseEntity<Page<ProductDTO>> getWonProductsByUserId(String userId, Integer page, Integer size);
     ResponseEntity<Page<ProductDTO>> getExpiredOwnProductsByUserId(String userId, Integer page, Integer size);
     ResponseEntity<Page<ProductDTO>> getActiveOwnProductsByUserId(String userId, Integer page, Integer size);
+    ResponseEntity<Page<RoleHistoryDTO>> getUnacceptedUpgradeRequests(Integer page, Integer size);
     ResponseEntity<SuccessResponse> addNewFavoriteProduct(String userId, FavoriteProductRequest favoriteProductRequest);
     ResponseEntity<SuccessResponse> deleteFavoriteProduct(String userId, FavoriteProductRequest favoriteProductRequest);
     ResponseEntity<SuccessResponse> sendRequestToUpgradeRole(String userId);

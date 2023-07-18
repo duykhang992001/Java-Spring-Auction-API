@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoleHistoryRepository extends JpaRepository<RoleHistory, String> {
     Page<RoleHistory> findByUserId(String userId, Pageable pageable);
+    Page<RoleHistory> findAllByIsAcceptedAndIsUpgraded(Boolean isAccepted, Boolean isUpgraded, Pageable pageable);
 }

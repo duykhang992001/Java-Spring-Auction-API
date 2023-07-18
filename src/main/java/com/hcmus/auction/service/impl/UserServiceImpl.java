@@ -8,6 +8,7 @@ import com.hcmus.auction.model.dto.AccountDTO;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.model.dto.ReviewDTO;
+import com.hcmus.auction.model.dto.RoleHistoryDTO;
 import com.hcmus.auction.model.dto.UserDTO;
 import com.hcmus.auction.model.entity.User;
 import com.hcmus.auction.model.mapper.UserMapper;
@@ -70,6 +71,11 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
         if (this.getById(userId) == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
         return productService.getActiveOwnProductsByUserId(userId, page, size);
+    }
+
+    @Override
+    public Page<RoleHistoryDTO> getUnacceptedUpgradeRequests(Integer page, Integer size) {
+        return roleHistoryService.getUnacceptedUpgradeRequests(page, size);
     }
 
     @Override

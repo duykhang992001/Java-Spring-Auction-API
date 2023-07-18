@@ -25,6 +25,6 @@ public class RoleHistoryMapper implements GenericMapper<RoleHistory, RoleHistory
 
     @Override
     public RoleHistoryDTO toDTO(RoleHistory roleHistory) {
-        return null;
+        return new RoleHistoryDTO(roleHistory.getId(), roleHistory.getUser().getId(), roleHistory.getCreatedAt(), roleHistory.getUpdatedAt(), roleHistory.getIsAccepted(), roleHistory.getIsUpgraded());
     }
 }
