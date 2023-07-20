@@ -17,7 +17,10 @@ public enum ErrorMessage {
     EXITED_FAVORITE_PRODUCT("This product has already existed in your watch list!"),
     NOT_EXISTED_FAVORITE_PRODUCT("This product has not already been existed in your watch list!"),
     CAN_NOT_UPGRADE_ROLE("Currently, you can not upgrade your role to seller! Maybe you are having a pending request or you are currently the seller"),
-    CAN_NOT_DELETE_CATEGORY_CONTAINING_PRODUCT("Can not delete category containing any products!");
+    CAN_NOT_DELETE_CATEGORY_CONTAINING_PRODUCT("Can not delete category containing any products!"),
+    NOT_EXISTED_UPGRADE_REQUEST("This upgrade request does not exist!"),
+    CAN_NOT_ACCEPT_UPGRADE_REQUEST("This upgrade request can not be accepted!"),
+    CAN_NOT_DECLINE_UPGRADE_REQUEST("This upgrade request can not be declined!");
 
     ErrorMessage(String message) {
         this.message = message;

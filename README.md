@@ -15,5 +15,5 @@ Current progress:
 - 3.4: GET /api/v1/users/{userId}/active?page={page}&size={size}, GET /api/v1/users/{userId}/expired?page={page}&size={size}
 - 4.1: GET /api/v1/categories, GET /api/v1/categories/{categoryId}, POST /api/v1/categories, POST /api/v1/categories/{categoryId}, PUT /api/v1/categories/inner/{categoryId}, PUT /api/v1/categories/outer/{categoryId}, DELETE /api/v1/categories/inner/{categoryId}, DELETE /api/v1/categories/outer/{categoryId}
 - 4.2: DELETE /api/v1/products/{productId}
-- 4.3: GET /api/v1/users/roles/requests?page={page}&size={size}
+- 4.3: GET /api/v1/users/roles/requests?page={page}&size={size}, PUT /api/v1/users/roles/requests/accept/{requestId}
 - 5.2: PUT /api/v1/users/{userId}/profile with request body { email: "", name: "", address: "" }

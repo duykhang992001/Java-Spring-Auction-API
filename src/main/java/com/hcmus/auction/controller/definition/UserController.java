@@ -26,4 +26,6 @@ public interface UserController {
     ResponseEntity<UserPointResponse> getPointsByUserId(String userId);
     ResponseEntity<AccountDTO> getProfile(String userId);
     ResponseEntity<SuccessResponse> updateProfile(String userId, ProfileRequest newProfile);
+    ResponseEntity<SuccessResponse> acceptUpgradeRequest(String requestId);
+    ResponseEntity<SuccessResponse> declineUpgradeRequest(String requestId);
 }

@@ -7,6 +7,7 @@ import com.hcmus.auction.model.dto.RoleHistoryDTO;
 import com.hcmus.auction.model.entity.RoleHistory;
 import com.hcmus.auction.model.mapper.RoleHistoryMapper;
 import com.hcmus.auction.repository.RoleHistoryRepository;
+import com.hcmus.auction.service.definition.GenericService;
 import com.hcmus.auction.service.definition.RoleHistoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,13 +16,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class RoleHistoryServiceImpl implements RoleHistoryService {
+public class RoleHistoryServiceImpl implements GenericService<RoleHistoryDTO, String>, RoleHistoryService {
     private RoleHistoryRepository roleHistoryRepository;
     private RoleHistoryMapper roleHistoryMapper;
+
+    @Override
+    public RoleHistoryDTO getById(String id) {
+        Optional<RoleHistory> roleHistoryOptional = roleHistoryRepository.findById(id);
+        return roleHistoryOptional.map(roleHistoryMapper::toDTO).orElse(null);
+    }
 
     @Override
     public Page<RoleHistoryDTO> getUnacceptedUpgradeRequests(Integer page, Integer size) {
@@ -61,5 +69,37 @@ public class RoleHistoryServiceImpl implements RoleHistoryService {
         } else {
             throw new GenericException(ErrorMessage.CAN_NOT_UPGRADE_ROLE.getMessage());
         }
+    }
+
+    @Override
+    public void acceptUpgradeRequest(String requestId) {
+        Optional<RoleHistory> roleHistoryOptional = roleHistoryRepository.findById(requestId);
+        RoleHistory roleHistory = roleHistoryOptional.orElse(null);
+
+        if (roleHistory == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_UPGRADE_REQUEST.getMessage());
+
+        if (!roleHistory.getIsUpgraded() || roleHistory.getIsAccepted() != null)
+            throw new GenericException(ErrorMessage.CAN_NOT_ACCEPT_UPGRADE_REQUEST.getMessage());
+
+        roleHistory.setIsAccepted(true);
+        roleHistory.setUpdatedAt(TimeUtil.getCurrentTimestamp());
+        roleHistoryRepository.save(roleHistory);
+    }
+
+    @Override
+    public void declineUpgradeRequest(String requestId) {
+        Optional<RoleHistory> roleHistoryOptional = roleHistoryRepository.findById(requestId);
+        RoleHistory roleHistory = roleHistoryOptional.orElse(null);
+
+        if (roleHistory == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_UPGRADE_REQUEST.getMessage());
+
+        if (!roleHistory.getIsUpgraded() || roleHistory.getIsAccepted() != null)
+            throw new GenericException(ErrorMessage.CAN_NOT_DECLINE_UPGRADE_REQUEST.getMessage());
+
+        roleHistory.setIsAccepted(false);
+        roleHistory.setUpdatedAt(TimeUtil.getCurrentTimestamp());
+        roleHistoryRepository.save(roleHistory);
     }
 }

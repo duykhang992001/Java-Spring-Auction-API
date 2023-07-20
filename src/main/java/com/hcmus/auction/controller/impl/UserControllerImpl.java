@@ -206,4 +206,23 @@ public class UserControllerImpl implements UserController {
         userService.updateProfile(userId, newProfile);
         return ResponseEntity.ok(new SuccessResponse(SuccessMessage.UPDATE_PROFILE_SUCCESSFULLY.getMessage()));
     }
+
+    @PutMapping(value = "/roles/requests/accept/{requestId}")
+    @Override
+    @ApiOperation(value = "Accept user role upgrade request")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Accept successfully"), @ApiResponse(code = 400, message = "Accept failed") })
+    public ResponseEntity<SuccessResponse> acceptUpgradeRequest(
+            @ApiParam(value = "Request id needs to accept") @PathVariable(value = "requestId") String requestId) {
+        userService.acceptUpgradeRequest(requestId);
+        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.ACCEPT_UPGRADE_ROLE_SUCCESSFULLY.getMessage()));
+    }
+
+    @PutMapping(value = "/roles/requests/decline/{requestId}")
+    @Override
+    @ApiOperation(value = "Decline user role upgrade request")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Decline successfully"), @ApiResponse(code = 400, message = "Decline failed") })
+    public ResponseEntity<SuccessResponse> declineUpgradeRequest(String requestId) {
+        userService.declineUpgradeRequest(requestId);
+        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.DECLINE_UPGRADE_ROLE_SUCCESSFULLY.getMessage()));
+    }
 }

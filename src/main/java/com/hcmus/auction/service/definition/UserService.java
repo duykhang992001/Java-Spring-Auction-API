@@ -23,4 +23,6 @@ public interface UserService {
     UserPointResponse getPointsByUserId(String userId);
     AccountDTO getProfile(String userId);
     void updateProfile(String userId, ProfileRequest newProfile);
+    void acceptUpgradeRequest(String requestId);
+    void declineUpgradeRequest(String requestId);
 }

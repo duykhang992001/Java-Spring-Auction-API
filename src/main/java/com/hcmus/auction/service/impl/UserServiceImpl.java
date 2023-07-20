@@ -1,5 +1,6 @@
 package com.hcmus.auction.service.impl;
 
+import com.hcmus.auction.common.util.TimeUtil;
 import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.common.variable.request.ProfileRequest;
 import com.hcmus.auction.common.variable.response.UserPointResponse;
@@ -12,6 +13,7 @@ import com.hcmus.auction.model.dto.RoleHistoryDTO;
 import com.hcmus.auction.model.dto.UserDTO;
 import com.hcmus.auction.model.entity.User;
 import com.hcmus.auction.model.mapper.UserMapper;
+import com.hcmus.auction.model.mapper.UserTypeMapper;
 import com.hcmus.auction.repository.UserRepository;
 import com.hcmus.auction.service.definition.GenericService;
 import com.hcmus.auction.service.definition.UserService;
@@ -31,6 +33,7 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
     private final ProductServiceImpl productService;
     private final ReviewServiceImpl reviewService;
     private final AccountServiceImpl accountService;
+    private final UserTypeServiceImpl userTypeService;
 
     @Override
     public UserDTO getById(String userId) {
@@ -135,5 +138,26 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
             throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
         }
 
+    }
+
+    @Override
+    public void acceptUpgradeRequest(String requestId) {
+        final Integer TIME_STAMP_IN_7_DAYS = 7 * 24 * 60 * 60;
+        final String SELLER_TYPE = "Seller";
+        UserTypeMapper userTypeMapper = new UserTypeMapper();
+        roleHistoryService.acceptUpgradeRequest(requestId);
+
+        RoleHistoryDTO roleHistoryDTO = roleHistoryService.getById(requestId);
+        Optional<User> userOptional = userRepository.findById(roleHistoryDTO.getUserId());
+        User user = userOptional.get();
+
+        user.setEndSellerTimestamp(TimeUtil.getCurrentTimestamp() + TIME_STAMP_IN_7_DAYS);
+        user.setType(userTypeMapper.toEntity(userTypeService.findByName(SELLER_TYPE)));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void declineUpgradeRequest(String requestId) {
+        roleHistoryService.declineUpgradeRequest(requestId);
     }
 }
