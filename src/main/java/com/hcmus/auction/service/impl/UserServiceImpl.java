@@ -160,4 +160,22 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
     public void declineUpgradeRequest(String requestId) {
         roleHistoryService.declineUpgradeRequest(requestId);
     }
+
+    @Override
+    public void downgradeUserRole(String userId) {
+        final String BIDDER_TYPE = "Bidder";
+        UserTypeMapper userTypeMapper = new UserTypeMapper();
+        Optional<User> userOptional = userRepository.findById(userId);
+        User user = userOptional.orElse(null);
+
+        if (user == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+        if (user.getEndSellerTimestamp() == null)
+            throw new GenericException(ErrorMessage.CAN_NOT_DOWNGRADE_USER_ROLE.getMessage());
+
+        roleHistoryService.downgradeUserRole(userId);
+        user.setEndSellerTimestamp(null);
+        user.setType(userTypeMapper.toEntity(userTypeService.findByName(BIDDER_TYPE)));
+        userRepository.save(user);
+    }
 }

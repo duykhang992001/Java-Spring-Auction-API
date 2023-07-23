@@ -102,4 +102,19 @@ public class RoleHistoryServiceImpl implements GenericService<RoleHistoryDTO, St
         roleHistory.setUpdatedAt(TimeUtil.getCurrentTimestamp());
         roleHistoryRepository.save(roleHistory);
     }
+
+    @Override
+    public void downgradeUserRole(String userId) {
+        Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
+        RoleHistoryDTO roleHistoryDTO = new RoleHistoryDTO();
+
+        roleHistoryDTO.setId(UUID.randomUUID().toString());
+        roleHistoryDTO.setUserId(userId);
+        roleHistoryDTO.setCreatedAt(currentTimestamp);
+        roleHistoryDTO.setUpdatedAt(currentTimestamp);
+        roleHistoryDTO.setIsUpgraded(false);
+        roleHistoryDTO.setIsAccepted(true);
+
+        roleHistoryRepository.save(roleHistoryMapper.toEntity(roleHistoryDTO));
+    }
 }

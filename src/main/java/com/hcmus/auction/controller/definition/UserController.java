@@ -28,4 +28,5 @@ public interface UserController {
     ResponseEntity<SuccessResponse> updateProfile(String userId, ProfileRequest newProfile);
     ResponseEntity<SuccessResponse> acceptUpgradeRequest(String requestId);
     ResponseEntity<SuccessResponse> declineUpgradeRequest(String requestId);
+    ResponseEntity<SuccessResponse> downgradeUserRole(String userId);
 }

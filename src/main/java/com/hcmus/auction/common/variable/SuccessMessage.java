@@ -15,7 +15,8 @@ public enum SuccessMessage {
     DELETE_INNER_CATEGORY_SUCCESSFULLY("Delete inner category successfully!"),
     DELETE_PRODUCT_SUCCESSFULLY("Delete product successfully!"),
     ACCEPT_UPGRADE_ROLE_SUCCESSFULLY("Accept upgrade user role successfully!"),
-    DECLINE_UPGRADE_ROLE_SUCCESSFULLY("Decline upgrade user role successfully!");
+    DECLINE_UPGRADE_ROLE_SUCCESSFULLY("Decline upgrade user role successfully!"),
+    DOWNGRADE_USER_ROLE_SUCCESSFULLY("Downgrade user role successfully!");
 
     SuccessMessage(String message) {
         this.message = message;

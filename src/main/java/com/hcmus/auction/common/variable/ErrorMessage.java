@@ -20,7 +20,8 @@ public enum ErrorMessage {
     CAN_NOT_DELETE_CATEGORY_CONTAINING_PRODUCT("Can not delete category containing any products!"),
     NOT_EXISTED_UPGRADE_REQUEST("This upgrade request does not exist!"),
     CAN_NOT_ACCEPT_UPGRADE_REQUEST("This upgrade request can not be accepted!"),
-    CAN_NOT_DECLINE_UPGRADE_REQUEST("This upgrade request can not be declined!");
+    CAN_NOT_DECLINE_UPGRADE_REQUEST("This upgrade request can not be declined!"),
+    CAN_NOT_DOWNGRADE_USER_ROLE("This user is not a seller, so you can not downgrade!");
 
     ErrorMessage(String message) {
         this.message = message;

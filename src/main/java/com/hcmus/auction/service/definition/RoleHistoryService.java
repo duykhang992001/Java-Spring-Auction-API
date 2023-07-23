@@ -8,4 +8,5 @@ public interface RoleHistoryService {
     void addNewRoleHistory(String userId);
     void acceptUpgradeRequest(String requestId);
     void declineUpgradeRequest(String requestId);
+    void downgradeUserRole(String userId);
 }

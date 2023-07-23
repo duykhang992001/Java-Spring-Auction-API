@@ -153,7 +153,7 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.ok(new SuccessResponse(SuccessMessage.DELETE_FAVORITE_PRODUCT_SUCCESSFULLY.getMessage()));
     }
 
-    @PostMapping(value = "/{userId}/roles/requests")
+    @PostMapping(value = "/{userId}/roles/requests/upgrade")
     @Override
     @ApiOperation(value = "Send a upgraded role request")
     @ApiResponses(value = { @ApiResponse(code = 201, message = "Send successfully"), @ApiResponse(code = 400, message = "Send failed") })
@@ -224,5 +224,16 @@ public class UserControllerImpl implements UserController {
     public ResponseEntity<SuccessResponse> declineUpgradeRequest(String requestId) {
         userService.declineUpgradeRequest(requestId);
         return ResponseEntity.ok(new SuccessResponse(SuccessMessage.DECLINE_UPGRADE_ROLE_SUCCESSFULLY.getMessage()));
+    }
+
+    @PostMapping(value = "/{userId}/roles/requests/downgrade")
+    @Override
+    @ApiOperation(value = "Downgrade a user from seller to bidder")
+    @ApiResponses(value = { @ApiResponse(code = 201, message = "Downgrade successfully"), @ApiResponse(code = 400, message = "Downgrade failed") })
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public ResponseEntity<SuccessResponse> downgradeUserRole(
+            @ApiParam(value = "User id needs to downgrade") @PathVariable(value = "userId") String userId) {
+        userService.downgradeUserRole(userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(SuccessMessage.DOWNGRADE_USER_ROLE_SUCCESSFULLY.getMessage()));
     }
 }
