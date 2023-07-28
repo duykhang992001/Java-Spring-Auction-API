@@ -2,13 +2,28 @@ package com.hcmus.auction.model.mapper;
 
 import com.hcmus.auction.model.dto.AuctionHistoryDTO;
 import com.hcmus.auction.model.entity.AuctionHistory;
+import com.hcmus.auction.model.entity.Product;
+import com.hcmus.auction.model.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AuctionHistoryMapper implements GenericMapper<AuctionHistory, AuctionHistoryDTO> {
     @Override
     public AuctionHistory toEntity(AuctionHistoryDTO auctionHistoryDTO) {
-        return null;
+        AuctionHistory auctionHistory = new AuctionHistory();
+        Product product = new Product();
+        User user = new User();
+
+        product.setId(auctionHistoryDTO.getProductId());
+        user.setId(auctionHistoryDTO.getBidder().getId());
+        auctionHistory.setId(auctionHistoryDTO.getId());
+        auctionHistory.setPrice(auctionHistoryDTO.getPrice());
+        auctionHistory.setCreatedAt(auctionHistoryDTO.getCreatedAt());
+        auctionHistory.setIsRejected(auctionHistoryDTO.getIsRejected());
+        auctionHistory.setProduct(product);
+        auctionHistory.setUser(user);
+
+        return auctionHistory;
     }
 
     @Override

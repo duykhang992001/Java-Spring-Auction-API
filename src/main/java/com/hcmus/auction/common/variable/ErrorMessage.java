@@ -21,7 +21,13 @@ public enum ErrorMessage {
     NOT_EXISTED_UPGRADE_REQUEST("This upgrade request does not exist!"),
     CAN_NOT_ACCEPT_UPGRADE_REQUEST("This upgrade request can not be accepted!"),
     CAN_NOT_DECLINE_UPGRADE_REQUEST("This upgrade request can not be declined!"),
-    CAN_NOT_DOWNGRADE_USER_ROLE("This user is not a seller, so you can not downgrade!");
+    CAN_NOT_DOWNGRADE_USER_ROLE("This user is not a seller, so you can not downgrade!"),
+    AUCTIONING_USER_CAN_NOT_BE_OWNER("Auctioning user can not be owner!"),
+    AUCTIONING_USER_CAN_NOT_BE_WINNER("Auctioning user can not be current winner!"),
+    NOT_ENOUGH_AUCTIONING_PERCENT("User must have the positive percent greater than 80%!"),
+    CAN_NOT_SEND_AUCTION_REQUEST("User has already sent the request!"),
+    AUCTIONING_PRICE_INVALID("The auctioning price is not invalid!"),
+    PRODUCT_EXPIRED("This product is expired!");
 
     ErrorMessage(String message) {
         this.message = message;

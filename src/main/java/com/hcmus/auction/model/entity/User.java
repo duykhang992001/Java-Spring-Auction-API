@@ -66,6 +66,9 @@ public class User {
     @OneToMany(mappedBy = "recipient")
     private List<Review> reviewsByOther = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<AuctionRequest> auctionRequests = new ArrayList<>();
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Account account;

@@ -8,7 +8,11 @@ import org.springframework.stereotype.Component;
 public class UserMapper implements GenericMapper<User, UserDTO> {
     @Override
     public User toEntity(UserDTO userDTO) {
-        return null;
+        User user = new User();
+
+        user.setId(userDTO.getId());
+
+        return user;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.hcmus.auction.service.definition;
 
 import com.hcmus.auction.common.variable.request.ProductRequest;
+import com.hcmus.auction.common.variable.response.SuccessResponse;
 import com.hcmus.auction.model.dto.AuctionHistoryDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
 import org.springframework.data.domain.Page;
@@ -15,4 +16,5 @@ public interface ProductService {
     void addNewProductDescription(String productId, String content);
     void addNewProduct(ProductRequest product);
     void deleteProductById(String productId);
+    SuccessResponse auctionProduct(String productId, String userId, Integer price);
 }

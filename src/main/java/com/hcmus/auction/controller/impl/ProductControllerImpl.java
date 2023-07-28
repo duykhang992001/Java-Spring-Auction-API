@@ -1,6 +1,7 @@
 package com.hcmus.auction.controller.impl;
 
 import com.hcmus.auction.common.util.RequestParamUtil;
+import com.hcmus.auction.common.variable.request.AuctionRequest;
 import com.hcmus.auction.common.variable.request.DescriptionHistoryRequest;
 import com.hcmus.auction.common.variable.request.ProductRequest;
 import com.hcmus.auction.common.variable.response.EmptyResponse;
@@ -112,7 +113,7 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>,
     @ApiResponses(value = { @ApiResponse(code = 201, message = "Add successfully"), @ApiResponse(code = 400, message = "Add failed") })
     @ResponseStatus(value = HttpStatus.CREATED)
     public ResponseEntity<SuccessResponse> addNewProductDescription(
-            @ApiParam(value = "Product id needs to add description") @PathVariable(value = "productId") String productId,
+            @ApiParam(value = "Product id needs to be added description") @PathVariable(value = "productId") String productId,
             @ApiParam(value = "Description needs to be added") @RequestBody DescriptionHistoryRequest descriptionHistoryRequest) {
         productService.addNewProductDescription(productId, descriptionHistoryRequest.getContent());
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(SuccessMessage.ADD_NEW_PRODUCT_DESCRIPTION_SUCCESSFULLY.getMessage()));
@@ -134,8 +135,20 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>,
     @ApiOperation(value = "Delete product")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Delete successfully"), @ApiResponse(code = 400, message = "Delete failed") })
     public ResponseEntity<SuccessResponse> deleteProductById(
-            @ApiParam(value = "Product id needs to delete") @PathVariable(value = "productId") String productId) {
+            @ApiParam(value = "Product id needs to be deleted") @PathVariable(value = "productId") String productId) {
         productService.deleteProductById(productId);
         return ResponseEntity.ok(new SuccessResponse(SuccessMessage.DELETE_PRODUCT_SUCCESSFULLY.getMessage()));
+    }
+
+    @PostMapping(value = "/{productId}/auction")
+    @Override
+    @ApiOperation(value = "Auction product")
+    @ApiResponses(value = { @ApiResponse(code = 201, message = "Auction successfully"), @ApiResponse(code = 400, message = "Auction failed") })
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public ResponseEntity<SuccessResponse> auctionProduct(
+            @ApiParam(value = "Product id needs to be auctioned") @PathVariable(value = "productId") String productId,
+            @ApiParam(value = "Auction info") @RequestBody AuctionRequest auctionRequest) {
+        SuccessResponse response = productService.auctionProduct(productId, auctionRequest.getUserId(), auctionRequest.getPrice());
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

@@ -1,5 +1,6 @@
 package com.hcmus.auction.controller.definition;
 
+import com.hcmus.auction.common.variable.request.AuctionRequest;
 import com.hcmus.auction.common.variable.request.DescriptionHistoryRequest;
 import com.hcmus.auction.common.variable.request.ProductRequest;
 import com.hcmus.auction.common.variable.response.SuccessResponse;
@@ -12,4 +13,5 @@ public interface ProductController {
     ResponseEntity<SuccessResponse> addNewProductDescription(String productId, DescriptionHistoryRequest descriptionHistoryRequest);
     ResponseEntity<SuccessResponse> addNewProduct(ProductRequest product);
     ResponseEntity<SuccessResponse> deleteProductById(String productId);
+    ResponseEntity<SuccessResponse> auctionProduct(String productId, AuctionRequest auctionRequest);
 }

@@ -2,6 +2,7 @@ package com.hcmus.auction.service.impl;
 
 import com.hcmus.auction.common.util.TimeUtil;
 import com.hcmus.auction.model.dto.AuctionHistoryDTO;
+import com.hcmus.auction.model.dto.UserDTO;
 import com.hcmus.auction.model.entity.AuctionHistory;
 import com.hcmus.auction.model.mapper.AuctionHistoryMapper;
 import com.hcmus.auction.repository.AuctionHistoryRepository;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -36,5 +39,21 @@ public class AuctionHistoryServiceImpl implements AuctionHistoryService {
         Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
         Pageable pageable = page != null && size != null ? PageRequest.of(page, size) : Pageable.unpaged();
         return auctionHistoryRepository.getAuctioningProductIdByUserId(userId, currentTimestamp, pageable);
+    }
+
+    @Override
+    public void addNewAuctionHistory(String userId, String productId, Integer price) {
+        AuctionHistoryDTO auctionHistoryDTO = new AuctionHistoryDTO();
+        UserDTO bidder = new UserDTO();
+
+        bidder.setId(userId);
+        auctionHistoryDTO.setId(UUID.randomUUID().toString());
+        auctionHistoryDTO.setPrice(price);
+        auctionHistoryDTO.setProductId(productId);
+        auctionHistoryDTO.setCreatedAt(TimeUtil.getCurrentTimestamp());
+        auctionHistoryDTO.setIsRejected(false);
+        auctionHistoryDTO.setBidder(bidder);
+
+        auctionHistoryRepository.save(auctionHistoryMapper.toEntity(auctionHistoryDTO));
     }
 }
