@@ -212,7 +212,7 @@ public class UserControllerImpl implements UserController {
     @ApiOperation(value = "Accept user role upgrade request")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Accept successfully"), @ApiResponse(code = 400, message = "Accept failed") })
     public ResponseEntity<SuccessResponse> acceptUpgradeRequest(
-            @ApiParam(value = "Request id needs to accept") @PathVariable(value = "requestId") String requestId) {
+            @ApiParam(value = "Request id needs to accepted") @PathVariable(value = "requestId") String requestId) {
         userService.acceptUpgradeRequest(requestId);
         return ResponseEntity.ok(new SuccessResponse(SuccessMessage.ACCEPT_UPGRADE_ROLE_SUCCESSFULLY.getMessage()));
     }
@@ -221,7 +221,8 @@ public class UserControllerImpl implements UserController {
     @Override
     @ApiOperation(value = "Decline user role upgrade request")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Decline successfully"), @ApiResponse(code = 400, message = "Decline failed") })
-    public ResponseEntity<SuccessResponse> declineUpgradeRequest(String requestId) {
+    public ResponseEntity<SuccessResponse> declineUpgradeRequest(
+            @ApiParam(value = "Request id needs to declined") @PathVariable(value = "requestId") String requestId) {
         userService.declineUpgradeRequest(requestId);
         return ResponseEntity.ok(new SuccessResponse(SuccessMessage.DECLINE_UPGRADE_ROLE_SUCCESSFULLY.getMessage()));
     }

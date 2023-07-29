@@ -13,6 +13,7 @@ import com.hcmus.auction.controller.definition.PaginationController;
 import com.hcmus.auction.controller.definition.ProductController;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.AuctionHistoryDTO;
+import com.hcmus.auction.model.dto.AuctionRequestDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
 import com.hcmus.auction.service.impl.ProductServiceImpl;
 import io.swagger.annotations.Api;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -150,5 +152,39 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>,
             @ApiParam(value = "Auction info") @RequestBody AuctionRequest auctionRequest) {
         SuccessResponse response = productService.auctionProduct(productId, auctionRequest.getUserId(), auctionRequest.getPrice());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping(value = "/{productId}/auction/requests")
+    @Override
+    @ApiOperation(value = "Get unaccepted auction requests with pagination")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
+    public ResponseEntity<Page<AuctionRequestDTO>> getUnacceptedAuctionRequestsByProductId(
+            @ApiParam(value = "Product id needs to be got unaccepted auction requests") @PathVariable(value = "productId") String productId,
+            @ApiParam(value = "Page number") @RequestParam(value = "page", required = false) Integer page,
+            @ApiParam(value = "Size of each page") @RequestParam(value = "size", required = false) Integer size) {
+        if (!RequestParamUtil.isValidPageParameters(page, size)) {
+            throw new GenericException(ErrorMessage.MISSING_PAGE_PARAMETERS.getMessage());
+        }
+        return ResponseEntity.ok(productService.getUnacceptedAuctionRequestsByProductId(productId, page, size));
+    }
+
+    @PutMapping(value = "/auction/requests/accept/{requestId}")
+    @Override
+    @ApiOperation(value = "Accept user auction request")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Accept successfully"), @ApiResponse(code = 400, message = "Accept failed") })
+    public ResponseEntity<SuccessResponse> acceptAuctionRequest(
+            @ApiParam(value = "Request id needs to accepted") @PathVariable(value = "requestId") String requestId) {
+        productService.acceptAuctionRequest(requestId);
+        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.ACCEPT_AUCTION_REQUEST_SUCCESSFULLY.getMessage()));
+    }
+
+    @PutMapping(value = "/auction/request/decline/{requestId}")
+    @Override
+    @ApiOperation(value = "Decline user auction request")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Accept successfully"), @ApiResponse(code = 400, message = "Accept failed") })
+    public ResponseEntity<SuccessResponse> declineAuctionRequest(
+            @ApiParam(value = "Request id needs to declined") @PathVariable(value = "requestId") String requestId) {
+        productService.declineAuctionRequest(requestId);
+        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.DECLINE_AUCTION_REQUEST_SUCCESSFULLY.getMessage()));
     }
 }

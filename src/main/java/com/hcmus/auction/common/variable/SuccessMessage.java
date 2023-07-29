@@ -18,7 +18,9 @@ public enum SuccessMessage {
     DECLINE_UPGRADE_ROLE_SUCCESSFULLY("Decline upgrade user role successfully!"),
     DOWNGRADE_USER_ROLE_SUCCESSFULLY("Downgrade user role successfully!"),
     AUCTION_SUCCESSFULLY("Auction product successfully!"),
-    SEND_AUCTION_REQUEST_SUCCESSFULLY("Send auction request successfully!");
+    SEND_AUCTION_REQUEST_SUCCESSFULLY("Send auction request successfully!"),
+    ACCEPT_AUCTION_REQUEST_SUCCESSFULLY("Accept auction request successfully!"),
+    DECLINE_AUCTION_REQUEST_SUCCESSFULLY("Decline auction request successfully!");
 
     SuccessMessage(String message) {
         this.message = message;

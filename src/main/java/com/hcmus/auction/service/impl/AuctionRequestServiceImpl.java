@@ -1,6 +1,8 @@
 package com.hcmus.auction.service.impl;
 
 import com.hcmus.auction.common.util.TimeUtil;
+import com.hcmus.auction.common.variable.ErrorMessage;
+import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.AuctionRequestDTO;
 import com.hcmus.auction.model.dto.UserDTO;
 import com.hcmus.auction.model.entity.AuctionRequest;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -52,5 +55,43 @@ public class AuctionRequestServiceImpl implements AuctionRequestService {
         auctionRequestDTO.setBidder(userDTO);
 
         auctionRequestRepository.save(auctionRequestMapper.toEntity(auctionRequestDTO));
+    }
+
+    @Override
+    public Page<AuctionRequestDTO> getUnacceptedAuctionRequestsByProductId(String productId, Integer page, Integer size) {
+        final String SORT_BY = "createdAt";
+        Pageable pageable = page != null && size != null ?
+                PageRequest.of(page, size, Sort.by(SORT_BY).descending()) :
+                PageRequest.of(0, Integer.MAX_VALUE, Sort.by(SORT_BY).descending());
+        Page<AuctionRequest> auctionRequestPage = auctionRequestRepository.findAllByProductIdAndIsAccepted(productId, null, pageable);
+        return auctionRequestPage.map(auctionRequestMapper::toDTO);
+    }
+
+    @Override
+    public void acceptAuctionRequest(String requestId) {
+        Optional<AuctionRequest> auctionRequestOptional = auctionRequestRepository.findById(requestId);
+        AuctionRequest auctionRequest = auctionRequestOptional.orElse(null);
+
+        if (auctionRequest == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_AUCTION_REQUEST.getMessage());
+        if (auctionRequest.getIsAccepted() != null)
+            throw new GenericException(ErrorMessage.CAN_NOT_ACCEPT_AUCTION_REQUEST.getMessage());
+
+        auctionRequest.setIsAccepted(true);
+        auctionRequestRepository.save(auctionRequest);
+    }
+
+    @Override
+    public void declineAuctionRequest(String requestId) {
+        Optional<AuctionRequest> auctionRequestOptional = auctionRequestRepository.findById(requestId);
+        AuctionRequest auctionRequest = auctionRequestOptional.orElse(null);
+
+        if (auctionRequest == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_AUCTION_REQUEST.getMessage());
+        if (auctionRequest.getIsAccepted() != null)
+            throw new GenericException(ErrorMessage.CAN_NOT_DECLINE_AUCTION_REQUEST.getMessage());
+
+        auctionRequest.setIsAccepted(false);
+        auctionRequestRepository.save(auctionRequest);
     }
 }

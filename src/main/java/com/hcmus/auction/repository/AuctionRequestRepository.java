@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AuctionRequestRepository extends JpaRepository<AuctionRequest, String> {
     Page<AuctionRequest> findAllByUserIdAndProductId(String userId, String productId, Pageable pageable);
+    Page<AuctionRequest> findAllByProductIdAndIsAccepted(String productId, Boolean isAccepted, Pageable pageable);
 }

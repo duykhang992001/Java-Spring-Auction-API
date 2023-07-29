@@ -8,6 +8,7 @@ import com.hcmus.auction.common.variable.request.ProductRequest;
 import com.hcmus.auction.common.variable.response.SuccessResponse;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.AuctionHistoryDTO;
+import com.hcmus.auction.model.dto.AuctionRequestDTO;
 import com.hcmus.auction.model.dto.ImageDTO;
 import com.hcmus.auction.model.dto.InnerCategoryDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
@@ -242,5 +243,22 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
         auctionHistoryService.addNewAuctionHistory(userId, productId, price);
 
         return new SuccessResponse(SuccessMessage.AUCTION_SUCCESSFULLY.getMessage());
+    }
+
+    @Override
+    public Page<AuctionRequestDTO> getUnacceptedAuctionRequestsByProductId(String productId, Integer page, Integer size) {
+        if (this.getById(productId) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_PRODUCT.getMessage());
+        return auctionRequestService.getUnacceptedAuctionRequestsByProductId(productId, page, size);
+    }
+
+    @Override
+    public void acceptAuctionRequest(String requestId) {
+        auctionRequestService.acceptAuctionRequest(requestId);
+    }
+
+    @Override
+    public void declineAuctionRequest(String requestId) {
+        auctionRequestService.declineAuctionRequest(requestId);
     }
 }

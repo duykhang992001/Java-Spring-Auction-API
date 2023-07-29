@@ -24,7 +24,16 @@ public class AuctionRequestMapper implements GenericMapper<AuctionRequest, Aucti
     }
 
     @Override
-    public AuctionRequestDTO toDTO(AuctionRequest object) {
-        return null;
+    public AuctionRequestDTO toDTO(AuctionRequest auctionRequest) {
+        AuctionRequestDTO auctionRequestDTO = new AuctionRequestDTO();
+        UserMapper userMapper = new UserMapper();
+
+        auctionRequestDTO.setId(auctionRequest.getId());
+        auctionRequestDTO.setProductId(auctionRequest.getProduct().getId());
+        auctionRequestDTO.setIsAccepted(auctionRequest.getIsAccepted());
+        auctionRequestDTO.setCreatedAt(auctionRequest.getCreatedAt());
+        auctionRequestDTO.setBidder(userMapper.toDTO(auctionRequest.getUser()));
+
+        return auctionRequestDTO;
     }
 }
