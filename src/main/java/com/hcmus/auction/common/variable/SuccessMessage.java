@@ -18,6 +18,7 @@ public enum SuccessMessage {
     DECLINE_UPGRADE_ROLE_SUCCESSFULLY("Decline upgrade user role successfully!"),
     DOWNGRADE_USER_ROLE_SUCCESSFULLY("Downgrade user role successfully!"),
     AUCTION_SUCCESSFULLY("Auction product successfully!"),
+    DECLINE_AUCTION_TURN_SUCCESSFULLY("Decline user auction turn successfully! The user can not auction this product in the future!"),
     SEND_AUCTION_REQUEST_SUCCESSFULLY("Send auction request successfully!"),
     ACCEPT_AUCTION_REQUEST_SUCCESSFULLY("Accept auction request successfully!"),
     DECLINE_AUCTION_REQUEST_SUCCESSFULLY("Decline auction request successfully!");

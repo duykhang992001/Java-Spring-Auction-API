@@ -1,6 +1,8 @@
 package com.hcmus.auction.service.impl;
 
 import com.hcmus.auction.common.util.TimeUtil;
+import com.hcmus.auction.common.variable.ErrorMessage;
+import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.AuctionHistoryDTO;
 import com.hcmus.auction.model.dto.UserDTO;
 import com.hcmus.auction.model.entity.AuctionHistory;
@@ -14,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -55,5 +59,26 @@ public class AuctionHistoryServiceImpl implements AuctionHistoryService {
         auctionHistoryDTO.setBidder(bidder);
 
         auctionHistoryRepository.save(auctionHistoryMapper.toEntity(auctionHistoryDTO));
+    }
+
+    @Override
+    public List<String> declineAuctionHistory(String auctionId) {
+        Optional<AuctionHistory> auctionHistoryOptional = auctionHistoryRepository.findById(auctionId);
+        AuctionHistory auctionHistory = auctionHistoryOptional.orElse(null);
+
+        if (auctionHistory == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_AUCTION_HISTORY.getMessage());
+        if (auctionHistory.getIsRejected())
+            throw new GenericException(ErrorMessage.CAN_NOT_DECLINE_AUCTION_HISTORY.getMessage());
+
+        String userId = auctionHistory.getUser().getId();
+        String productId = auctionHistory.getProduct().getId();
+        List<AuctionHistory> auctionHistoriesBeDeclined = auctionHistoryRepository.findAllByUserIdAndProductId(userId, productId);
+        for (AuctionHistory auctionHistoryBeDeclined : auctionHistoriesBeDeclined) {
+            auctionHistoryBeDeclined.setIsRejected(true);
+        }
+        auctionHistoryRepository.saveAll(auctionHistoriesBeDeclined);
+
+        return List.of(userId, productId, String.valueOf(auctionHistoriesBeDeclined.size()));
     }
 }

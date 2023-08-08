@@ -16,6 +16,7 @@ import com.hcmus.auction.model.dto.UserDTO;
 import com.hcmus.auction.model.entity.Product;
 import com.hcmus.auction.model.entity.User;
 import com.hcmus.auction.model.mapper.ProductMapper;
+import com.hcmus.auction.model.mapper.UserMapper;
 import com.hcmus.auction.repository.ProductRepository;
 import com.hcmus.auction.service.definition.GenericService;
 import com.hcmus.auction.service.definition.PaginationService;
@@ -200,7 +201,6 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
         final int DIFF_5_MINUTES_IN_SECONDS = 5 * 60;
         final int CAN_NOT_SEND_REQUEST = 0;
         final int CAN_SEND_REQUEST = 1;
-        final int ABLE_TO_AUCTION = 2;
         Optional<Product> productOptional = productRepository.findById(productId);
         Product product = productOptional.orElse(null);
         UserDTO user = userService.getById(userId);
@@ -243,6 +243,30 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
         auctionHistoryService.addNewAuctionHistory(userId, productId, price);
 
         return new SuccessResponse(SuccessMessage.AUCTION_SUCCESSFULLY.getMessage());
+    }
+
+    @Override
+    public void declineAuctionHistory(String auctionId) {
+        List<String> auctionInfo = auctionHistoryService.declineAuctionHistory(auctionId);
+        String userId = auctionInfo.get(0);
+        String productId = auctionInfo.get(1);
+        String numOfDecreasedBid = auctionInfo.get(2);
+        System.out.println(numOfDecreasedBid);
+        Optional<Product> productOptional = productRepository.findById(productId);
+        Product product = productOptional.get();
+
+        if (product.getCurrentWinner().getId().equals(userId)) {
+            final int PAGE = 0;
+            final int SIZE = 1;
+            UserMapper userMapper = new UserMapper();
+            Page<AuctionHistoryDTO> auctionHistoryDTOPage = auctionHistoryService.getAuctionHistoriesByProductId(productId, PAGE, SIZE, null);
+            List<AuctionHistoryDTO> auctionHistoryDTOs = auctionHistoryDTOPage.getContent();
+            product.setCurrentPrice(auctionHistoryDTOs.get(0).getPrice());
+            product.setCurrentWinner(userMapper.toEntity(auctionHistoryDTOs.get(0).getBidder()));
+        }
+
+        product.setNumOfBid(product.getNumOfBid() - Integer.parseInt(numOfDecreasedBid));
+        productRepository.save(product);
     }
 
     @Override

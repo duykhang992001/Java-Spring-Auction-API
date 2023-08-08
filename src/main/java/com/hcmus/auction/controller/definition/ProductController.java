@@ -15,6 +15,7 @@ public interface ProductController {
     ResponseEntity<SuccessResponse> addNewProduct(ProductRequest product);
     ResponseEntity<SuccessResponse> deleteProductById(String productId);
     ResponseEntity<SuccessResponse> auctionProduct(String productId, AuctionRequest auctionRequest);
+    ResponseEntity<SuccessResponse> declineAuctionHistory(String auctionId);
     ResponseEntity<Page<AuctionRequestDTO>> getUnacceptedAuctionRequestsByProductId(String productId, Integer page, Integer size);
     ResponseEntity<SuccessResponse> acceptAuctionRequest(String requestId);
     ResponseEntity<SuccessResponse> declineAuctionRequest(String requestId);

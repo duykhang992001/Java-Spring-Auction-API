@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AuctionHistoryRepository extends JpaRepository<AuctionHistory, String> {
     Page<AuctionHistory> findAllByProductIdAndIsRejected(String productId, Boolean isRejected, Pageable pageable);
@@ -14,4 +16,6 @@ public interface AuctionHistoryRepository extends JpaRepository<AuctionHistory, 
     @Query(value = "SELECT DISTINCT ah.product_id FROM auction_history ah JOIN product p ON ah.product_id = p.id " +
             "WHERE ah.user_id = ?1 AND ah.is_rejected = 0 AND p.end_timestamp >= ?2", nativeQuery = true)
     Page<String> getAuctioningProductIdByUserId(String userId, Integer endTimestamp, Pageable pageable);
+
+    List<AuctionHistory> findAllByUserIdAndProductId(String userId, String productId);
 }

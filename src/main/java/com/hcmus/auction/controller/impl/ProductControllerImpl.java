@@ -154,6 +154,16 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>,
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PutMapping(value = "/auction/{auctionId}")
+    @Override
+    @ApiOperation(value = "Decline a user auction turn")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Decline successfully"), @ApiResponse(code = 400, message = "Decline failed") })
+    public ResponseEntity<SuccessResponse> declineAuctionHistory(
+            @ApiParam(value = "Auction id needs to be declined") @PathVariable(value = "auctionId") String auctionId) {
+        productService.declineAuctionHistory(auctionId);
+        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.DECLINE_AUCTION_TURN_SUCCESSFULLY.getMessage()));
+    }
+
     @GetMapping(value = "/{productId}/auction/requests")
     @Override
     @ApiOperation(value = "Get unaccepted auction requests with pagination")

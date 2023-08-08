@@ -18,6 +18,7 @@ public interface ProductService {
     void addNewProduct(ProductRequest product);
     void deleteProductById(String productId);
     SuccessResponse auctionProduct(String productId, String userId, Integer price);
+    void declineAuctionHistory(String auctionId);
     Page<AuctionRequestDTO> getUnacceptedAuctionRequestsByProductId(String productId, Integer page, Integer size);
     void acceptAuctionRequest(String requestId);
     void declineAuctionRequest(String requestId);
