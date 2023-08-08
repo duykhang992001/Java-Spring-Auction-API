@@ -12,4 +12,5 @@ public interface AuctionHistoryService {
     Page<String> getAuctioningProductIdByUserId(String userId, Integer page, Integer size);
     void addNewAuctionHistory(String userId, String productId, Integer price);
     List<String> declineAuctionHistory(String auctionId);
+    boolean isAbleToAuction(String userId, String productId);
 }

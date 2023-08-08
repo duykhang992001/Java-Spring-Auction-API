@@ -13,6 +13,7 @@ Current progress:
 - 2.5: POST /api/v1/users/{userId}/roles/requests/upgrade
 - 3.1: POST /api/v1/products with request body { name: "", current_price: , additional_price: , buy_now_price: , category_id: "", owner_id: "", is_auto_extend_time: , start_timestamp: , end_timestamp: , description: "", images: [ { is_thumbnail_image: , url: "" } ] }
 - 3.2: POST /api/v1/products/{productId}/descriptions with request body { content: "" }
+- 3.3: PUT /api/v1/products/auction/decline/{auctionId} 
 - 3.4: GET /api/v1/users/{userId}/active?page={page}&size={size}, GET /api/v1/users/{userId}/expired?page={page}&size={size}
 - 4.1: GET /api/v1/categories, GET /api/v1/categories/{categoryId}, POST /api/v1/categories, POST /api/v1/categories/{categoryId}, PUT /api/v1/categories/inner/{categoryId}, PUT /api/v1/categories/outer/{categoryId}, DELETE /api/v1/categories/inner/{categoryId}, DELETE /api/v1/categories/outer/{categoryId}
 - 4.2: DELETE /api/v1/products/{productId}

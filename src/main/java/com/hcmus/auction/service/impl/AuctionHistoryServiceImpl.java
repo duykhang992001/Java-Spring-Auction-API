@@ -81,4 +81,10 @@ public class AuctionHistoryServiceImpl implements AuctionHistoryService {
 
         return List.of(userId, productId, String.valueOf(auctionHistoriesBeDeclined.size()));
     }
+
+    @Override
+    public boolean isAbleToAuction(String userId, String productId) {
+        List<AuctionHistory> auctionHistories = auctionHistoryRepository.findAllByUserIdAndProductId(userId, productId);
+        return !auctionHistories.get(0).getIsRejected();
+    }
 }

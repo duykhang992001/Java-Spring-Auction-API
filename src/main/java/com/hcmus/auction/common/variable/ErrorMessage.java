@@ -30,6 +30,7 @@ public enum ErrorMessage {
     NOT_ENOUGH_AUCTIONING_PERCENT("User must have the positive percent greater than 80%!"),
     CAN_NOT_SEND_AUCTION_REQUEST("User has already sent the request!"),
     AUCTIONING_PRICE_INVALID("The auctioning price is not invalid!"),
+    REJECTED_USER("User has been rejected to auction this product!"),
     PRODUCT_EXPIRED("This product is expired!"),
     NOT_EXISTED_AUCTION_HISTORY("This auction history does not exist!"),
     CAN_NOT_DECLINE_AUCTION_HISTORY("This auction history has already rejected!");

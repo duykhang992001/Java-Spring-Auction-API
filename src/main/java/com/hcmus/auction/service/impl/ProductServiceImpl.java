@@ -229,6 +229,8 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
         if (price <= product.getCurrentPrice() || price > product.getBuyNowPrice() ||
                 ((price - product.getCurrentPrice()) % product.getAdditionalPrice() != 0))
             throw new GenericException(ErrorMessage.AUCTIONING_PRICE_INVALID.getMessage());
+        if (!auctionHistoryService.isAbleToAuction(userId, productId))
+            throw new GenericException(ErrorMessage.REJECTED_USER.getMessage());
 
         User bidder = new User();
 

@@ -154,7 +154,7 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>,
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping(value = "/auction/{auctionId}")
+    @PutMapping(value = "/auction/decline/{auctionId}")
     @Override
     @ApiOperation(value = "Decline a user auction turn")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Decline successfully"), @ApiResponse(code = 400, message = "Decline failed") })
