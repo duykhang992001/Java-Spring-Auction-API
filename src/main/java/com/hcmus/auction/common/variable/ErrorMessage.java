@@ -33,7 +33,9 @@ public enum ErrorMessage {
     REJECTED_USER("User has been rejected to auction this product!"),
     PRODUCT_EXPIRED("This product is expired!"),
     NOT_EXISTED_AUCTION_HISTORY("This auction history does not exist!"),
-    CAN_NOT_DECLINE_AUCTION_HISTORY("This auction history has already rejected!");
+    CAN_NOT_DECLINE_AUCTION_HISTORY("This auction history has already rejected!"),
+    ALREADY_SEND_REVIEW("You have already reviewed this product!"),
+    UNABLE_TO_SEND_REVIEW("Now, you don't have permission to review this product!");
 
     ErrorMessage(String message) {
         this.message = message;

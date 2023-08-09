@@ -4,6 +4,7 @@ import com.hcmus.auction.common.util.RequestParamUtil;
 import com.hcmus.auction.common.variable.request.AuctionRequest;
 import com.hcmus.auction.common.variable.request.DescriptionHistoryRequest;
 import com.hcmus.auction.common.variable.request.ProductRequest;
+import com.hcmus.auction.common.variable.request.ReviewRequest;
 import com.hcmus.auction.common.variable.response.EmptyResponse;
 import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.common.variable.SuccessMessage;
@@ -15,6 +16,7 @@ import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.AuctionHistoryDTO;
 import com.hcmus.auction.model.dto.AuctionRequestDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
+import com.hcmus.auction.model.dto.ReviewDTO;
 import com.hcmus.auction.service.impl.ProductServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +37,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/products", produces = "application/json")
@@ -196,5 +200,38 @@ public class ProductControllerImpl implements PaginationController<ProductDTO>,
             @ApiParam(value = "Request id needs to declined") @PathVariable(value = "requestId") String requestId) {
         productService.declineAuctionRequest(requestId);
         return ResponseEntity.ok(new SuccessResponse(SuccessMessage.DECLINE_AUCTION_REQUEST_SUCCESSFULLY.getMessage()));
+    }
+
+    @PostMapping(value = "/{productId}/winner/reviews")
+    @Override
+    @ApiOperation(value = "Send a product review by winner")
+    @ApiResponses(value = { @ApiResponse(code = 201, message = "Send successfully"), @ApiResponse(code = 400, message = "Send failed") })
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public ResponseEntity<SuccessResponse> reviewProductByBidder(
+            @ApiParam(value = "Product id needs to added review") @PathVariable(value = "productId") String productId,
+            @ApiParam(value = "Review info") @RequestBody ReviewRequest review) {
+        productService.reviewProductByBidder(productId, review.getSenderId(), review.getComment(), review.getIsLiked());
+        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.SEND_REVIEW_SUCCESSFULLY.getMessage()));
+    }
+
+    @PostMapping(value = "/{productId}/owner/reviews")
+    @Override
+    @ApiOperation(value = "Send a product review by owner")
+    @ApiResponses(value = { @ApiResponse(code = 201, message = "Send successfully"), @ApiResponse(code = 400, message = "Send failed") })
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public ResponseEntity<SuccessResponse> reviewProductByOwner(
+            @ApiParam(value = "Product id needs to added review") @PathVariable(value = "productId") String productId,
+            @ApiParam(value = "Review info") @RequestBody ReviewRequest review) {
+        productService.reviewProductByOwner(productId, review.getSenderId(), review.getComment(), review.getIsLiked());
+        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.SEND_REVIEW_SUCCESSFULLY.getMessage()));
+    }
+
+    @GetMapping(value = "/{productId}/reviews")
+    @Override
+    @ApiOperation(value = "Get reviews by product id")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Get successfully"), @ApiResponse(code = 400, message = "Get failed") })
+    public ResponseEntity<List<ReviewDTO>> getReviewsByProductId(
+            @ApiParam(value = "Product id needs to got reviews") @PathVariable(value = "productId") String productId) {
+        return ResponseEntity.ok(productService.getReviewsByProductId(productId));
     }
 }

@@ -21,7 +21,8 @@ public enum SuccessMessage {
     DECLINE_AUCTION_TURN_SUCCESSFULLY("Decline user auction turn successfully! The user can not auction this product in the future!"),
     SEND_AUCTION_REQUEST_SUCCESSFULLY("Send auction request successfully!"),
     ACCEPT_AUCTION_REQUEST_SUCCESSFULLY("Accept auction request successfully!"),
-    DECLINE_AUCTION_REQUEST_SUCCESSFULLY("Decline auction request successfully!");
+    DECLINE_AUCTION_REQUEST_SUCCESSFULLY("Decline auction request successfully!"),
+    SEND_REVIEW_SUCCESSFULLY("Send review successfully!");
 
     SuccessMessage(String message) {
         this.message = message;

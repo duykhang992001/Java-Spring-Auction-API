@@ -12,6 +12,7 @@ import com.hcmus.auction.model.dto.AuctionRequestDTO;
 import com.hcmus.auction.model.dto.ImageDTO;
 import com.hcmus.auction.model.dto.InnerCategoryDTO;
 import com.hcmus.auction.model.dto.ProductDTO;
+import com.hcmus.auction.model.dto.ReviewDTO;
 import com.hcmus.auction.model.dto.UserDTO;
 import com.hcmus.auction.model.entity.Product;
 import com.hcmus.auction.model.entity.User;
@@ -59,6 +60,9 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
 
     @Autowired
     private AuctionRequestServiceImpl auctionRequestService;
+
+    @Autowired
+    private ReviewServiceImpl reviewService;
 
     @Override
     public Page<ProductDTO> getAll(Integer page, Integer size, String sortBy, String orderBy, String keyword, Integer lte, Integer gte) {
@@ -286,5 +290,40 @@ public class ProductServiceImpl implements PaginationService<ProductDTO>,
     @Override
     public void declineAuctionRequest(String requestId) {
         auctionRequestService.declineAuctionRequest(requestId);
+    }
+
+    @Override
+    public void reviewProductByBidder(String productId, String userId, String comment, Boolean isLiked) {
+        ProductDTO productDTO = this.getById(productId);
+        Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
+        if (productDTO == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_PRODUCT.getMessage());
+        if (userService.getById(userId) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+        if (!productDTO.getCurrentWinner().getId().equals(userId) || productDTO.getEndTimestamp() > currentTimestamp)
+            throw new GenericException(ErrorMessage.UNABLE_TO_SEND_REVIEW.getMessage());
+        reviewService.addNewReview(productId, userId, productDTO.getOwner().getId(), comment, isLiked);
+        userService.changePoint(productDTO.getOwner().getId(), isLiked);
+    }
+
+    @Override
+    public void reviewProductByOwner(String productId, String userId, String comment, Boolean isLiked) {
+        ProductDTO productDTO = this.getById(productId);
+        Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
+        if (productDTO == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_PRODUCT.getMessage());
+        if (userService.getById(userId) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+        if (!productDTO.getOwner().getId().equals(userId) || productDTO.getEndTimestamp() > currentTimestamp)
+            throw new GenericException(ErrorMessage.UNABLE_TO_SEND_REVIEW.getMessage());
+        reviewService.addNewReview(productId, userId, productDTO.getCurrentWinner().getId(), comment, isLiked);
+        userService.changePoint(productDTO.getCurrentWinner().getId(), isLiked);
+    }
+
+    @Override
+    public List<ReviewDTO> getReviewsByProductId(String productId) {
+        if (this.getById(productId) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_PRODUCT.getMessage());
+        return reviewService.getReviewsByProductId(productId);
     }
 }

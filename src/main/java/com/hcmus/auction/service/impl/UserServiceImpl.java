@@ -178,4 +178,20 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
         user.setType(userTypeMapper.toEntity(userTypeService.findByName(BIDDER_TYPE)));
         userRepository.save(user);
     }
+
+    @Override
+    public void changePoint(String userId, Boolean isLiked) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        User user = userOptional.orElse(null);
+
+        if (user == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+
+        if (isLiked)
+            user.setNumOfLike(user.getNumOfLike() + 1);
+        else
+            user.setNumOfDislike(user.getNumOfDislike() + 1);
+
+        userRepository.save(user);
+    }
 }

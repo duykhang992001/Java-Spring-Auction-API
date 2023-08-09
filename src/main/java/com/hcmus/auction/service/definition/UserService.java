@@ -26,4 +26,5 @@ public interface UserService {
     void acceptUpgradeRequest(String requestId);
     void declineUpgradeRequest(String requestId);
     void downgradeUserRole(String userId);
+    void changePoint(String userId, Boolean isLiked);
 }
