@@ -69,6 +69,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<AuctionRequest> auctionRequests = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<OtpHistory> otpHistories = new ArrayList<>();
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Account account;

@@ -17,23 +17,38 @@ import com.hcmus.auction.model.mapper.UserTypeMapper;
 import com.hcmus.auction.repository.UserRepository;
 import com.hcmus.auction.service.definition.GenericService;
 import com.hcmus.auction.service.definition.UserService;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
-@AllArgsConstructor
 public class UserServiceImpl implements GenericService<UserDTO, String>, UserService {
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
-    private final FavoriteProductServiceImpl favoriteProductService;
-    private final RoleHistoryServiceImpl roleHistoryService;
-    private final ProductServiceImpl productService;
-    private final ReviewServiceImpl reviewService;
-    private final AccountServiceImpl accountService;
-    private final UserTypeServiceImpl userTypeService;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private FavoriteProductServiceImpl favoriteProductService;
+
+    @Autowired
+    private RoleHistoryServiceImpl roleHistoryService;
+
+    @Autowired
+    private ProductServiceImpl productService;
+
+    @Autowired
+    private ReviewServiceImpl reviewService;
+
+    @Autowired
+    private AccountServiceImpl accountService;
+
+    @Autowired
+    private UserTypeServiceImpl userTypeService;
 
     @Override
     public UserDTO getById(String userId) {
@@ -193,5 +208,34 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
             user.setNumOfDislike(user.getNumOfDislike() + 1);
 
         userRepository.save(user);
+    }
+
+    @Override
+    public boolean isExistedAccount(String email) {
+        return accountService.isExistedAccount(email);
+    }
+
+    @Override
+    public String addNewUser(String email, String password, String name, String address) {
+        String userId = UUID.randomUUID().toString();
+        final String BIDDER_TYPE = "Bidder";
+        UserDTO userDTO = new UserDTO();
+
+        userDTO.setId(userId);
+        userDTO.setName(name);
+        userDTO.setNumOfLike(0);
+        userDTO.setNumOfDislike(0);
+        userDTO.setAddress(address);
+        userDTO.setUserType(userTypeService.findByName(BIDDER_TYPE));
+
+        User user = userRepository.save(userMapper.toEntity(userDTO));
+        accountService.addNewAccount(user, email, password);
+
+        return userId;
+    }
+
+    @Override
+    public void activateAccount(String userId) {
+        accountService.activateAccount(userId);
     }
 }

@@ -3,6 +3,7 @@ package com.hcmus.auction.model.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -33,4 +34,10 @@ public class Account {
 
     @Column(name = "is_activated")
     private Boolean isActivated;
+
+    @Column(name = "last_login_timestamp")
+    private Integer lastLoginTimestamp;
+
+    @Column(name = "refresh_token")
+    private String refreshToken;
 }

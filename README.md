@@ -6,6 +6,7 @@ Current progress:
 - 1.3: GET /api/v1/categories/{categoryId}/products?page={page}&size={size}&lte={lte}&gte={gte}
 - 1.4: GET /api/v1/products?page={page}&size={size}&q={search}&sort_by={endTimestamp, currentPrice}&order_by={asc,desc}
 - 1.5: GET /api/v1/products/{productId} and GET /api/v1/categories/{categoryId}/products?page=0&size=5&exclusiveProductId={productId}
+- 1.6: POST /api/v1/auth/registration with request body { name: "", address: "", email: "", password: "" }, PUT /api/v1/auth/registration/otp/verification with request body { user_id: "", otp_code: "" }
 - 2.1: POST /api/v1/users/{userId}/favorite and DELETE /api/v1/users/{userId}/favorite with request body { product_id: "" }
 - 2.2: POST /api/v1/products/{productId}/auction with request body { user_id: "", price: }
 - 2.3: GET /api/v1/products/{productId}/histories?page={page}&size={size}&order_by={asc,desc}
@@ -18,4 +19,5 @@ Current progress:
 - 4.1: GET /api/v1/categories, GET /api/v1/categories/{categoryId}, POST /api/v1/categories, POST /api/v1/categories/{categoryId}, PUT /api/v1/categories/inner/{categoryId}, PUT /api/v1/categories/outer/{categoryId}, DELETE /api/v1/categories/inner/{categoryId}, DELETE /api/v1/categories/outer/{categoryId}
 - 4.2: DELETE /api/v1/products/{productId}
 - 4.3: GET /api/v1/users/roles/requests?page={page}&size={size}, PUT /api/v1/users/roles/requests/accept/{requestId}, POST /api/v1/users/{userId}/roles/requests/downgrade
+- 5.1: POST /api/v1/auth/registration with request body { name: "", address: "", email: "", password: "" }, PUT /api/v1/auth/registration/otp/verification with request body { user_id: "", otp_code: "" }
 - 5.2: PUT /api/v1/users/{userId}/profile with request body { email: "", name: "", address: "" }

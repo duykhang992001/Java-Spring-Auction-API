@@ -27,4 +27,7 @@ public interface UserService {
     void declineUpgradeRequest(String requestId);
     void downgradeUserRole(String userId);
     void changePoint(String userId, Boolean isLiked);
+    boolean isExistedAccount(String email);
+    String addNewUser(String email, String password, String name, String address);
+    void activateAccount(String userId);
 }

@@ -35,7 +35,11 @@ public enum ErrorMessage {
     NOT_EXISTED_AUCTION_HISTORY("This auction history does not exist!"),
     CAN_NOT_DECLINE_AUCTION_HISTORY("This auction history has already rejected!"),
     ALREADY_SEND_REVIEW("You have already reviewed this product!"),
-    UNABLE_TO_SEND_REVIEW("Now, you don't have permission to review this product!");
+    UNABLE_TO_SEND_REVIEW("Now, you don't have permission to review this product!"),
+    EXISTED_ACCOUNT("This email has been already used!"),
+    DO_NOT_HAVE_OTP_RECORD("You don't have any otp needed to be verified!"),
+    OTP_EXPIRED("Otp has been expired!"),
+    INVALID_OTP("Otp value is invalid!");
 
     ErrorMessage(String message) {
         this.message = message;

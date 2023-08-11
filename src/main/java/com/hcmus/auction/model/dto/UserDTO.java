@@ -26,4 +26,7 @@ public class UserDTO {
     @JsonProperty(value = "num_of_dislike")
     @ApiModelProperty(value = "Number of user's dislike", example = "1")
     private Integer numOfDislike;
+
+    @JsonProperty(value = "user_type")
+    private UserTypeDTO userType;
 }

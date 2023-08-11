@@ -1,6 +1,7 @@
 package com.hcmus.auction.common.variable;
 
 public enum SuccessMessage {
+    SEND_OTP_SUCCESSFULLY("Please check your email to verify OTP code!"),
     ADD_FAVORITE_PRODUCT_SUCCESSFULLY("Add favorite product successfully!"),
     DELETE_FAVORITE_PRODUCT_SUCCESSFULLY("Delete favorite product successfully!"),
     ADD_NEW_ROLE_HISTORY_SUCCESSFULLY("Send upgrade role request successfully!"),
@@ -22,7 +23,8 @@ public enum SuccessMessage {
     SEND_AUCTION_REQUEST_SUCCESSFULLY("Send auction request successfully!"),
     ACCEPT_AUCTION_REQUEST_SUCCESSFULLY("Accept auction request successfully!"),
     DECLINE_AUCTION_REQUEST_SUCCESSFULLY("Decline auction request successfully!"),
-    SEND_REVIEW_SUCCESSFULLY("Send review successfully!");
+    SEND_REVIEW_SUCCESSFULLY("Send review successfully!"),
+    VERIFY_OTP_SUCCESSFULLY("Verify otp code successfully!");
 
     SuccessMessage(String message) {
         this.message = message;
