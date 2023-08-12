@@ -30,4 +30,5 @@ public interface UserService {
     boolean isExistedAccount(String email);
     String addNewUser(String email, String password, String name, String address);
     void activateAccount(String userId);
+    void changePassword(String userId, String oldPassword, String newPassword);
 }

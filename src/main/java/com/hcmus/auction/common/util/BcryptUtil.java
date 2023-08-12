@@ -8,4 +8,8 @@ public class BcryptUtil {
     public static String hashText(String text) {
         return BCrypt.hashpw(text, BCrypt.gensalt(SALT_ROUNDS));
     }
+
+    public static boolean isSameText(String plainText, String hashedText) {
+        return BCrypt.checkpw(plainText, hashedText);
+    }
 }

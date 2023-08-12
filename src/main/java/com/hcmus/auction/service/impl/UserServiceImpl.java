@@ -238,4 +238,11 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
     public void activateAccount(String userId) {
         accountService.activateAccount(userId);
     }
+
+    @Override
+    public void changePassword(String userId, String oldPassword, String newPassword) {
+        if (this.getById(userId) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+        accountService.changePassword(userId, oldPassword, newPassword);
+    }
 }

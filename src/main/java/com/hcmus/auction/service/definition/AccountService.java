@@ -7,4 +7,5 @@ public interface AccountService {
     boolean isExistedAccount(String email);
     void addNewAccount(User user, String email, String password);
     void activateAccount(String userId);
+    void changePassword(String userId, String oldPassword, String newPassword);
 }

@@ -39,7 +39,8 @@ public enum ErrorMessage {
     EXISTED_ACCOUNT("This email has been already used!"),
     DO_NOT_HAVE_OTP_RECORD("You don't have any otp needed to be verified!"),
     OTP_EXPIRED("Otp has been expired!"),
-    INVALID_OTP("Otp value is invalid!");
+    INVALID_OTP("Otp value is invalid!"),
+    WRONG_PASSWORD("Old password is wrong!");
 
     ErrorMessage(String message) {
         this.message = message;

@@ -5,6 +5,7 @@ import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.common.variable.request.FavoriteProductRequest;
 import com.hcmus.auction.common.variable.request.ProfileRequest;
 import com.hcmus.auction.common.variable.SuccessMessage;
+import com.hcmus.auction.common.variable.request.ResetPasswordRequest;
 import com.hcmus.auction.common.variable.response.SuccessResponse;
 import com.hcmus.auction.common.variable.response.UserPointResponse;
 import com.hcmus.auction.controller.definition.UserController;
@@ -236,5 +237,16 @@ public class UserControllerImpl implements UserController {
             @ApiParam(value = "User id needs to downgrade") @PathVariable(value = "userId") String userId) {
         userService.downgradeUserRole(userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse(SuccessMessage.DOWNGRADE_USER_ROLE_SUCCESSFULLY.getMessage()));
+    }
+
+    @PutMapping(value = "/{userId}/password")
+    @Override
+    @ApiOperation(value = "Change user password")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Change successfully"), @ApiResponse(code = 400, message = "Change failed") })
+    public ResponseEntity<SuccessResponse> changePassword(
+            @ApiParam(value = "User id needs to changed password") @PathVariable(value = "userId") String userId,
+            @ApiParam(value = "Password info") @RequestBody ResetPasswordRequest resetPasswordRequest) {
+        userService.changePassword(userId, resetPasswordRequest.getOldPassword(), resetPasswordRequest.getNewPassword());
+        return ResponseEntity.ok(new SuccessResponse(SuccessMessage.RESET_PASSWORD_SUCCESSFULLY.getMessage()));
     }
 }

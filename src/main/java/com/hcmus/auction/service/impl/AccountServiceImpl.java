@@ -80,4 +80,16 @@ public class AccountServiceImpl implements GenericService<AccountDTO, String>, A
         account.setIsActivated(true);
         accountRepository.save(account);
     }
+
+    @Override
+    public void changePassword(String userId, String oldPassword, String newPassword) {
+        Optional<Account> accountOptional = accountRepository.findById(userId);
+        Account account = accountOptional.get();
+
+        if (!BcryptUtil.isSameText(oldPassword, account.getPassword()))
+            throw new GenericException(ErrorMessage.WRONG_PASSWORD.getMessage());
+
+        account.setPassword(BcryptUtil.hashText(newPassword));
+        accountRepository.save(account);
+    }
 }
