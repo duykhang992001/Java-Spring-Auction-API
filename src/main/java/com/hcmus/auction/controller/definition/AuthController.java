@@ -1,9 +1,11 @@
 package com.hcmus.auction.controller.definition;
 
 import com.hcmus.auction.common.variable.request.EmailRequest;
+import com.hcmus.auction.common.variable.request.LoginRequest;
 import com.hcmus.auction.common.variable.request.OtpRequest;
 import com.hcmus.auction.common.variable.request.ResetPasswordRequest;
 import com.hcmus.auction.common.variable.request.SignUpRequest;
+import com.hcmus.auction.common.variable.response.LoginResponse;
 import com.hcmus.auction.common.variable.response.OtpTokenResponse;
 import com.hcmus.auction.common.variable.response.SuccessResponse;
 import com.hcmus.auction.common.variable.response.UserIdResponse;
@@ -15,4 +17,5 @@ public interface AuthController {
     ResponseEntity<UserIdResponse> sendForgotPasswordOtpViaEmail(EmailRequest emailRequest);
     ResponseEntity<OtpTokenResponse> verifyForgotPasswordOtpCode(OtpRequest otpRequest);
     ResponseEntity<SuccessResponse> resetPassword(ResetPasswordRequest resetPasswordRequest);
+    ResponseEntity<LoginResponse> login(LoginRequest loginRequest);
 }

@@ -1,5 +1,6 @@
 package com.hcmus.auction.service.definition;
 
+import com.hcmus.auction.common.variable.response.LoginResponse;
 import com.hcmus.auction.model.entity.User;
 
 public interface AccountService {
@@ -10,4 +11,5 @@ public interface AccountService {
     void changePassword(String userId, String oldPassword, String newPassword);
     String getUserByEmail(String email);
     void resetPassword(String userId, String password);
+    LoginResponse login(String email, String password);
 }

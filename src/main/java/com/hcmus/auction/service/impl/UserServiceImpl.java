@@ -3,6 +3,7 @@ package com.hcmus.auction.service.impl;
 import com.hcmus.auction.common.util.TimeUtil;
 import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.common.variable.request.ProfileRequest;
+import com.hcmus.auction.common.variable.response.LoginResponse;
 import com.hcmus.auction.common.variable.response.UserPointResponse;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.AccountDTO;
@@ -257,5 +258,10 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
     @Override
     public void resetPassword(String userId, String password) {
         accountService.resetPassword(userId, password);
+    }
+
+    @Override
+    public LoginResponse login(String email, String password) {
+        return accountService.login(email, password);
     }
 }

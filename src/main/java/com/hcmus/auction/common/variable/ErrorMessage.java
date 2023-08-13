@@ -41,7 +41,8 @@ public enum ErrorMessage {
     OTP_EXPIRED("Otp has been expired!"),
     INVALID_OTP("Otp value is invalid!"),
     WRONG_PASSWORD("Old password is wrong!"),
-    INVALID_OTP_TOKEN("Otp token is invalid!");
+    INVALID_OTP_TOKEN("Otp token is invalid!"),
+    NOT_ACTIVATE_ACCOUNT("Account is not activated!");
 
     ErrorMessage(String message) {
         this.message = message;

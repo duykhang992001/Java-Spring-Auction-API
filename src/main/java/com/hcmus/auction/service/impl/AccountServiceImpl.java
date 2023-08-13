@@ -1,7 +1,9 @@
 package com.hcmus.auction.service.impl;
 
 import com.hcmus.auction.common.util.BcryptUtil;
+import com.hcmus.auction.common.util.JwtUtil;
 import com.hcmus.auction.common.variable.ErrorMessage;
+import com.hcmus.auction.common.variable.response.LoginResponse;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.model.dto.AccountDTO;
 import com.hcmus.auction.model.entity.Account;
@@ -110,5 +112,19 @@ public class AccountServiceImpl implements GenericService<AccountDTO, String>, A
         Account account = accountOptional.get();
         account.setPassword(BcryptUtil.hashText(password));
         accountRepository.save(account);
+    }
+
+    @Override
+    public LoginResponse login(String email, String password) {
+        Optional<Account> accountOptional = accountRepository.findByEmail(email);
+        Account account = accountOptional.orElse(null);
+
+        if (account == null || !BcryptUtil.isSameText(password, account.getPassword()))
+            throw new GenericException(ErrorMessage.NOT_EXISTED_ACCOUNT.getMessage());
+        if (!account.getIsActivated())
+            throw new GenericException(ErrorMessage.NOT_ACTIVATE_ACCOUNT.getMessage());
+
+        String accessToken = JwtUtil.createAccessToken(account.getId());
+        return new LoginResponse(accountMapper.toDTO(account), accessToken, account.getRefreshToken());
     }
 }

@@ -2,9 +2,11 @@ package com.hcmus.auction.controller.impl;
 
 import com.hcmus.auction.common.variable.SuccessMessage;
 import com.hcmus.auction.common.variable.request.EmailRequest;
+import com.hcmus.auction.common.variable.request.LoginRequest;
 import com.hcmus.auction.common.variable.request.OtpRequest;
 import com.hcmus.auction.common.variable.request.ResetPasswordRequest;
 import com.hcmus.auction.common.variable.request.SignUpRequest;
+import com.hcmus.auction.common.variable.response.LoginResponse;
 import com.hcmus.auction.common.variable.response.OtpTokenResponse;
 import com.hcmus.auction.common.variable.response.SuccessResponse;
 import com.hcmus.auction.common.variable.response.UserIdResponse;
@@ -83,5 +85,14 @@ public class AuthControllerImpl implements AuthController {
             @ApiParam(value = "Password info") @RequestBody ResetPasswordRequest resetPasswordRequest) {
         authService.resetPassword(resetPasswordRequest.getToken(), resetPasswordRequest.getUserId(), resetPasswordRequest.getPassword());
         return ResponseEntity.ok(new SuccessResponse(SuccessMessage.RESET_PASSWORD_SUCCESSFULLY.getMessage()));
+    }
+
+    @PostMapping(value = "/login")
+    @Override
+    @ApiOperation(value = "Login to system")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Login successfully"), @ApiResponse(code = 400, message = "Login failed") })
+    public ResponseEntity<LoginResponse> login(
+            @ApiParam(value = "Login info") @RequestBody LoginRequest loginRequest) {
+        return ResponseEntity.ok(authService.login(loginRequest.getEmail(), loginRequest.getPassword()));
     }
 }

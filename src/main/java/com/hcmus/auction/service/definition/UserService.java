@@ -1,6 +1,7 @@
 package com.hcmus.auction.service.definition;
 
 import com.hcmus.auction.common.variable.request.ProfileRequest;
+import com.hcmus.auction.common.variable.response.LoginResponse;
 import com.hcmus.auction.common.variable.response.UserPointResponse;
 import com.hcmus.auction.model.dto.AccountDTO;
 import com.hcmus.auction.model.dto.FavoriteProductDTO;
@@ -35,4 +36,5 @@ public interface UserService {
     void changePassword(String userId, String oldPassword, String newPassword);
     List<String> getUserByEmail(String email);
     void resetPassword(String userId, String password);
+    LoginResponse login(String email, String password);
 }

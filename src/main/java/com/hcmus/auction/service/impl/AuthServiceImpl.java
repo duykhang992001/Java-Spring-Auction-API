@@ -3,6 +3,7 @@ package com.hcmus.auction.service.impl;
 import com.hcmus.auction.common.util.MailUtil;
 import com.hcmus.auction.common.util.OtpUtil;
 import com.hcmus.auction.common.variable.ErrorMessage;
+import com.hcmus.auction.common.variable.response.LoginResponse;
 import com.hcmus.auction.exception.GenericException;
 import com.hcmus.auction.service.definition.AuthService;
 import com.hcmus.auction.service.impl.email.EmailDetail;
@@ -77,5 +78,10 @@ public class AuthServiceImpl implements AuthService {
         if (!otpHistoryService.isValidOtpToken(token, userId))
             throw new GenericException(ErrorMessage.INVALID_OTP_TOKEN.getMessage());
         userService.resetPassword(userId, password);
+    }
+
+    @Override
+    public LoginResponse login(String email, String password) {
+        return userService.login(email, password);
     }
 }
