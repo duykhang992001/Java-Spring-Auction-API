@@ -8,4 +8,6 @@ public interface AccountService {
     void addNewAccount(User user, String email, String password);
     void activateAccount(String userId);
     void changePassword(String userId, String oldPassword, String newPassword);
+    String getUserByEmail(String email);
+    void resetPassword(String userId, String password);
 }

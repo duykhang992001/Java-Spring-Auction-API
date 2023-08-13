@@ -92,4 +92,23 @@ public class AccountServiceImpl implements GenericService<AccountDTO, String>, A
         account.setPassword(BcryptUtil.hashText(newPassword));
         accountRepository.save(account);
     }
+
+    @Override
+    public String getUserByEmail(String email) {
+        Optional<Account> accountOptional = accountRepository.findByEmail(email);
+        Account account = accountOptional.orElse(null);
+
+        if (account == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_ACCOUNT.getMessage());
+
+        return account.getId();
+    }
+
+    @Override
+    public void resetPassword(String userId, String password) {
+        Optional<Account> accountOptional = accountRepository.findById(userId);
+        Account account = accountOptional.get();
+        account.setPassword(BcryptUtil.hashText(password));
+        accountRepository.save(account);
+    }
 }

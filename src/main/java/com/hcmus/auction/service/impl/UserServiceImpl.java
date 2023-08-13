@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -244,5 +245,17 @@ public class UserServiceImpl implements GenericService<UserDTO, String>, UserSer
         if (this.getById(userId) == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
         accountService.changePassword(userId, oldPassword, newPassword);
+    }
+
+    @Override
+    public List<String> getUserByEmail(String email) {
+        String userId = accountService.getUserByEmail(email);
+        UserDTO userDTO = this.getById(userId);
+        return List.of(userId, userDTO.getName());
+    }
+
+    @Override
+    public void resetPassword(String userId, String password) {
+        accountService.resetPassword(userId, password);
     }
 }

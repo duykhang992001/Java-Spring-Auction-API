@@ -9,6 +9,8 @@ import com.hcmus.auction.model.dto.ReviewDTO;
 import com.hcmus.auction.model.dto.RoleHistoryDTO;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface UserService {
     Page<FavoriteProductDTO> getFavoriteProductsByUserId(String userId, Integer page, Integer size, Integer lte, Integer gte);
     Page<ProductDTO> getAuctioningProductsByUserId(String userId, Integer page, Integer size);
@@ -31,4 +33,6 @@ public interface UserService {
     String addNewUser(String email, String password, String name, String address);
     void activateAccount(String userId);
     void changePassword(String userId, String oldPassword, String newPassword);
+    List<String> getUserByEmail(String email);
+    void resetPassword(String userId, String password);
 }

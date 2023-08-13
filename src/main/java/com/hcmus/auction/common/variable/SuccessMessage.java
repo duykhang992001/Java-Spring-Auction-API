@@ -25,7 +25,8 @@ public enum SuccessMessage {
     DECLINE_AUCTION_REQUEST_SUCCESSFULLY("Decline auction request successfully!"),
     SEND_REVIEW_SUCCESSFULLY("Send review successfully!"),
     VERIFY_OTP_SUCCESSFULLY("Verify otp code successfully!"),
-    RESET_PASSWORD_SUCCESSFULLY("Reset password successfully!");
+    RESET_PASSWORD_SUCCESSFULLY("Reset password successfully!"),
+    CHANGE_PASSWORD_SUCCESSFULLY("Change password successfully!");
 
     SuccessMessage(String message) {
         this.message = message;

@@ -21,3 +21,4 @@ Current progress:
 - 4.3: GET /api/v1/users/roles/requests?page={page}&size={size}, PUT /api/v1/users/roles/requests/accept/{requestId}, POST /api/v1/users/{userId}/roles/requests/downgrade
 - 5.2: PUT /api/v1/users/{userId}/profile with request body { email: "", name: "", address: "" }
 - 5.3: PUT /api/v1/users/{userId}/password with request body { new_password: "", old_password: "" }
+- 5.4: POST /api/v1/auth/password/otp with request body { email: "" }, POST /api/v1/auth/password/otp/verification with request body { user_id: "", otp_code: "" }, PUT /api/v1/auth/password with request body { token: "", user_id: "", password: "" }

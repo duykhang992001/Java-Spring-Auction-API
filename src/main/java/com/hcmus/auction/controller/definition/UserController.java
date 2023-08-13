@@ -2,7 +2,7 @@ package com.hcmus.auction.controller.definition;
 
 import com.hcmus.auction.common.variable.request.FavoriteProductRequest;
 import com.hcmus.auction.common.variable.request.ProfileRequest;
-import com.hcmus.auction.common.variable.request.ResetPasswordRequest;
+import com.hcmus.auction.common.variable.request.ChangePasswordRequest;
 import com.hcmus.auction.common.variable.response.SuccessResponse;
 import com.hcmus.auction.common.variable.response.UserPointResponse;
 import com.hcmus.auction.model.dto.AccountDTO;
@@ -30,5 +30,5 @@ public interface UserController {
     ResponseEntity<SuccessResponse> acceptUpgradeRequest(String requestId);
     ResponseEntity<SuccessResponse> declineUpgradeRequest(String requestId);
     ResponseEntity<SuccessResponse> downgradeUserRole(String userId);
-    ResponseEntity<SuccessResponse> changePassword(String userId, ResetPasswordRequest resetPasswordRequest);
+    ResponseEntity<SuccessResponse> changePassword(String userId, ChangePasswordRequest changePasswordRequest);
 }

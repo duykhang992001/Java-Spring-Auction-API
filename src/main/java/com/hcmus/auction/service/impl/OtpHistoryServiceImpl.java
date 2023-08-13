@@ -1,5 +1,6 @@
 package com.hcmus.auction.service.impl;
 
+import com.hcmus.auction.common.util.BcryptUtil;
 import com.hcmus.auction.common.util.TimeUtil;
 import com.hcmus.auction.common.variable.ErrorMessage;
 import com.hcmus.auction.exception.GenericException;
@@ -24,7 +25,15 @@ public class OtpHistoryServiceImpl implements OtpHistoryService {
     private final OtpHistoryMapper otpHistoryMapper;
 
     @Override
-    public void addNewOtpForRegistration(String value, String userId) {
+    public OtpHistory getLastOtpRecordByUserIdAndType(String userId, Boolean isUsedForSignUp) {
+        final String SORT_BY = "startTimestamp";
+        Pageable pageable = PageRequest.of(0, 1, Sort.by(SORT_BY).descending());
+        Page<OtpHistory> otpHistoryPage = otpHistoryRepository.findAllByUserIdAndIsUsedForSignUp(userId, isUsedForSignUp, pageable);
+        return otpHistoryPage.isEmpty() ? null : otpHistoryPage.getContent().get(0);
+    }
+
+    @Override
+    public void addNewOtp(String value, String userId, Boolean isUsedForSignUp) {
         OtpHistoryDTO otpHistoryDTO = new OtpHistoryDTO();
         Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
         final Integer DIFF_5_MINUTES_IN_SECOND = 5 * 60;
@@ -35,21 +44,17 @@ public class OtpHistoryServiceImpl implements OtpHistoryService {
         otpHistoryDTO.setStartTimestamp(currentTimestamp);
         otpHistoryDTO.setEndTimestamp(currentTimestamp + DIFF_5_MINUTES_IN_SECOND);
         otpHistoryDTO.setIsUsed(false);
-        otpHistoryDTO.setIsUsedForSignUp(true);
+        otpHistoryDTO.setIsUsedForSignUp(isUsedForSignUp);
 
         otpHistoryRepository.save(otpHistoryMapper.toEntity(otpHistoryDTO));
     }
 
     @Override
-    public void verifyRegistrationOtpCode(String userId, String otpCode) {
-        final String SORT_BY = "startTimestamp";
-        final Boolean IS_USED_FOR_SIGN_UP = true;
+    public String verifyOtpCode(String userId, String otpCode, Boolean isUsedForSignUp) {
         Integer currentTimestamp = TimeUtil.getCurrentTimestamp();
-        Pageable pageable = PageRequest.of(0, 1, Sort.by(SORT_BY).descending());
-        Page<OtpHistory> otpHistoryPage = otpHistoryRepository.findAllByUserIdAndIsUsedForSignUp(userId, IS_USED_FOR_SIGN_UP, pageable);
+        OtpHistory otpHistory = this.getLastOtpRecordByUserIdAndType(userId, isUsedForSignUp);
 
-        if (!otpHistoryPage.isEmpty()) {
-            OtpHistory otpHistory = otpHistoryPage.getContent().get(0);
+        if (otpHistory != null) {
             if (otpHistory.getIsUsed())
                 throw new GenericException(ErrorMessage.DO_NOT_HAVE_OTP_RECORD.getMessage());
             if (!otpHistory.getValue().equals(otpCode))
@@ -58,7 +63,15 @@ public class OtpHistoryServiceImpl implements OtpHistoryService {
                 throw new GenericException(ErrorMessage.OTP_EXPIRED.getMessage());
             otpHistory.setIsUsed(true);
             otpHistoryRepository.save(otpHistory);
+            return BcryptUtil.hashText(otpHistory.getEndTimestamp() + otpCode);
         } else
             throw new GenericException(ErrorMessage.DO_NOT_HAVE_OTP_RECORD.getMessage());
+    }
+
+    @Override
+    public boolean isValidOtpToken(String token, String userId) {
+        final Boolean IS_USED_FOR_SIGN_UP = false;
+        OtpHistory otpHistory = this.getLastOtpRecordByUserIdAndType(userId, IS_USED_FOR_SIGN_UP);
+        return BcryptUtil.isSameText(otpHistory.getEndTimestamp() + otpHistory.getValue(), token);
     }
 }

@@ -10,6 +10,8 @@ import com.hcmus.auction.service.impl.email.EmailServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -26,18 +28,54 @@ public class AuthServiceImpl implements AuthService {
         String otpCode = OtpUtil.createOtpCode();
         final String EMAIL_BODY = MailUtil.getEmailBodyWhenReceivingOtp(name, otpCode);
         final String EMAIL_OBJECT = "Solar Banking: Please verify your email address";
+        final Boolean IS_USED_FOR_SIGN_UP = true;
         EmailDetail emailDetail = new EmailDetail(email, EMAIL_BODY, EMAIL_OBJECT);
 
-        otpHistoryService.addNewOtpForRegistration(otpCode, userId);
+        otpHistoryService.addNewOtp(otpCode, userId, IS_USED_FOR_SIGN_UP);
         emailService.sendEmail(emailDetail);
         return userId;
     }
 
     @Override
     public void verifyRegistrationOtpCode(String userId, String otpCode) {
+        final Boolean IS_USED_FOR_SIGN_UP = true;
         if (userService.getById(userId) == null)
             throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
-        otpHistoryService.verifyRegistrationOtpCode(userId, otpCode);
+        otpHistoryService.verifyOtpCode(userId, otpCode, IS_USED_FOR_SIGN_UP);
         userService.activateAccount(userId);
+    }
+
+    @Override
+    public String sendForgotPasswordOtpViaEmail(String email) {
+        List<String> userInfo = userService.getUserByEmail(email);
+        String userId = userInfo.get(0);
+        String name = userInfo.get(1);
+
+        String otpCode = OtpUtil.createOtpCode();
+        final String EMAIL_BODY = MailUtil.getEmailBodyWhenReceivingOtp(name, otpCode);
+        final String EMAIL_OBJECT = "Solar Banking: Please verify your email address";
+        final Boolean IS_USED_FOR_SIGN_UP = false;
+        EmailDetail emailDetail = new EmailDetail(email, EMAIL_BODY, EMAIL_OBJECT);
+
+        otpHistoryService.addNewOtp(otpCode, userId, IS_USED_FOR_SIGN_UP);
+        emailService.sendEmail(emailDetail);
+        return userId;
+    }
+
+    @Override
+    public String verifyForgotPasswordOtpCode(String userId, String otpCode) {
+        final Boolean IS_USED_FOR_SIGN_UP = false;
+        if (userService.getById(userId) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+        return otpHistoryService.verifyOtpCode(userId, otpCode, IS_USED_FOR_SIGN_UP);
+    }
+
+    @Override
+    public void resetPassword(String token, String userId, String password) {
+        if (userService.getById(userId) == null)
+            throw new GenericException(ErrorMessage.NOT_EXISTED_USER.getMessage());
+        if (!otpHistoryService.isValidOtpToken(token, userId))
+            throw new GenericException(ErrorMessage.INVALID_OTP_TOKEN.getMessage());
+        userService.resetPassword(userId, password);
     }
 }

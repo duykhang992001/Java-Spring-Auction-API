@@ -40,7 +40,8 @@ public enum ErrorMessage {
     DO_NOT_HAVE_OTP_RECORD("You don't have any otp needed to be verified!"),
     OTP_EXPIRED("Otp has been expired!"),
     INVALID_OTP("Otp value is invalid!"),
-    WRONG_PASSWORD("Old password is wrong!");
+    WRONG_PASSWORD("Old password is wrong!"),
+    INVALID_OTP_TOKEN("Otp token is invalid!");
 
     ErrorMessage(String message) {
         this.message = message;
