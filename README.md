@@ -1,6 +1,14 @@
 # This is backend project for an auction application. Requirement link: https://hackmd.io/@nndkhoa9/BJKMTpH5r
 
-Current progress: 
+## How to use this project:
+- Clone the project via github
+- Open project in IDE (recommend IntelliJ)
+- Open MySQL server and run the sql script in the project
+- Open file application.properties and edit database config which is suitable for your server.
+- Build the project and run
+- Open Swagger UI to test our API.
+
+## Current progress: 
 - 1.1: GET /api/v1/categories
 - 1.2: GET /api/v1/products?page=0&size=5&order_by=desc&sort_by={endTimestamp, currentPrice, numOfBid}
 - 1.3: GET /api/v1/categories/{categoryId}/products?page={page}&size={size}&lte={lte}&gte={gte}
